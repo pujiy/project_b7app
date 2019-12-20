@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="B7TPM App by Dimas Aji"/>
+            android:text="B7 Engineering App by Dimas Aji"/>
 
 
         <TextView
@@ -46,6 +46,7 @@
 
 
         <EditText
+            android:id="@+id/edt_email"
             android:layout_width="250dp"
             android:layout_height="30dp"
             android:layout_below="@+id/tv_email"
@@ -88,23 +89,13 @@
             />
 
 
-        <ImageView
+        <Button
             android:id="@+id/btn_login"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="90dp"
             android:layout_below="@+id/iv_password"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_login" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edt_password"
-            android:textColor="#FFFFFF"
-            android:text="Login"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp" />
 
 
         <TextView
@@ -121,6 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
+            android:textSize="16sp"
             android:layout_centerHorizontal="true"
             android:text="@string/textview_case_signup"/>
 

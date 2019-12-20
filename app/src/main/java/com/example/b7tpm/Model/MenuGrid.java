@@ -3,7 +3,7 @@ package com.example.b7tpm.Model;
 public class MenuGrid {
 
     private String name;
-    private String detail;
+
     private int photo;
 
     public String getName() {
@@ -12,14 +12,6 @@ public class MenuGrid {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
     }
 
     public int getPhoto() {

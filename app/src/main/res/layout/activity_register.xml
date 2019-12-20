@@ -66,6 +66,7 @@
             android:layout_height="35dp"
             android:layout_below="@+id/edt_username"
             android:layout_marginTop="33dp"
+            android:inputType="textEmailAddress"
             android:layout_centerHorizontal="true"
             android:background="#FAFAFA"/>
 
@@ -118,6 +119,7 @@
             android:layout_height="35dp"
             android:layout_below="@+id/tv_password"
             android:layout_marginTop="5dp"
+            android:inputType="textPassword"
             android:layout_centerHorizontal="true"
             android:background="#FAFAFA"/>
 
@@ -131,29 +133,23 @@
             android:text="@string/checkbox_signup"
             android:textSize="11sp" />
         
-        <ImageView
+        <Button
+            android:id="@+id/btn_register"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/button_register"
+            android:layout_height="90dp"
+            android:background="@drawable/button_register"
             android:layout_below="@+id/cb_register"
             android:layout_centerHorizontal="true"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Register"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/cb_register"
-            android:layout_marginTop="30dp"
-            android:textColor="@android:color/white"/>
+
 
         <TextView
+            android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_register"
             android:text="@string/textview_case_login"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="30dp" />
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

@@ -18,9 +18,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .withFullScreen()
                 .withTargetActivity(MainActivity.class)
                 .withSplashTimeOut(8000)
-                .withBackgroundColor(Color.WHITE)
-                .withBeforeLogoText("B7TPM APP by Dimas Aji")
-                .withLogo(R.drawable.bintang_toedjo);
+                .withBackgroundResource(R.drawable.gradient_backround)
+                .withBeforeLogoText("B7 Engineering App by Dimas Aji")
+                .withLogo(R.drawable.bintang_toedjo_with_background);
 
         config.getBeforeLogoTextView().setTextColor(Color.BLACK);
 

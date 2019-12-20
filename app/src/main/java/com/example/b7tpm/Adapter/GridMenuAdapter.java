@@ -20,8 +20,14 @@ import java.util.ArrayList;
 public class GridMenuAdapter extends RecyclerView.Adapter<GridMenuAdapter.GridViewHolder> {
     private ArrayList<MenuGrid> listGrid;
 
+    private OnItemClickCallback onItemClickCallback;
+
     public GridMenuAdapter(ArrayList<MenuGrid> listGrid) {
         this.listGrid = listGrid;
+    }
+
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback;
     }
 
     @NonNull
@@ -32,14 +38,28 @@ public class GridMenuAdapter extends RecyclerView.Adapter<GridMenuAdapter.GridVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GridViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GridViewHolder holder, int position) {
         Glide.with(holder.itemView.getContext())
                 .load(listGrid.get(position).getPhoto())
                 .apply(new RequestOptions().override(150, 150))
                 .into(holder.imgPhoto);
 
         holder.txtGrid.setText(listGrid.get(position).getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickCallback.onItemClicked(listGrid.get(holder.getAdapterPosition()));
+            }
+        });
     }
+
+    public interface OnItemClickCallback {
+        void onItemClicked(MenuGrid data);
+    }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -55,4 +75,6 @@ public class GridMenuAdapter extends RecyclerView.Adapter<GridMenuAdapter.GridVi
             txtGrid = itemView.findViewById(R.id.tv_menu_grid);
         }
     }
+
+
 }
