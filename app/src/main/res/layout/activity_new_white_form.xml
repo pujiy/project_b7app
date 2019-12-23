@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    style=""
     tools:context=".NewWhiteFormActivity">
 
 
@@ -42,7 +43,8 @@
             android:layout_marginRight="20dp"
             app:met_floatingLabel="highlight"
             android:textSize="16sp"
-            android:hint="Nomor Kontrol"/>
+            android:hint="Nomor Kontrol"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtbagianmesin"
@@ -53,7 +55,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Bagian Mesin"/>
+            android:hint="Bagian Mesin"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtdipasangoleh"
@@ -64,7 +67,8 @@
             android:layout_marginRight="20dp"
             app:met_floatingLabel="highlight"
             android:textSize="16sp"
-            android:hint="Dipasang Oleh"/>
+            android:hint="Dipasang Oleh"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -104,7 +108,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Deskripsi"/>
+            android:hint="Deskripsi"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,7 +118,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="16sp"
-            android:text="Upload Gambar" />
+            android:text="Upload Gambar"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <Button
             android:id="@+id/btnuploadgambar"
@@ -122,7 +128,8 @@
             android:layout_marginRight="20dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/ic_image_black_24dp"/>
+            android:background="@drawable/ic_image_black_24dp"
+            />
 
         <ImageView
             android:id="@+id/ivimage"
@@ -171,7 +178,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Cara Penanggulangan"/>
+            android:hint="Cara Penanggulangan"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"

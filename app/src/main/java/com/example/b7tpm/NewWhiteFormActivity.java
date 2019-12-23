@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -21,6 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b7tpm.Api.APIService;
+import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +39,16 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewWhiteFormActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -43,7 +58,11 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
     private Button btnsubmitwhiteform;
     private ImageView imageViewPhoto;
     private ProgressBar progressBar;
-    private EditText editTextNomorKontrol;
+    private String photo;
+    private TextView textViewTanggalPasang, textViewDueDate;
+    private EditText editTextNomorKontrol, editTextBagianMesin, editTextdipasangoleh, editTextdeskripsi, editTextCaraPenanggulangan;
+
+    private Context ctx;
 
     private Uri imageUri;
 
@@ -67,7 +86,14 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         imageViewPhoto = findViewById(R.id.ivimage);
         btnsubmitwhiteform = findViewById(R.id.btn_submit_white_form);
         progressBar = findViewById(R.id.progress_bar);
+        textViewTanggalPasang = findViewById(R.id.tvtglpasang);
+        textViewDueDate = findViewById(R.id.tvduedate);
         editTextNomorKontrol = findViewById(R.id.edtnomorkontrol);
+        editTextBagianMesin = findViewById(R.id.edtbagianmesin);
+        editTextdipasangoleh = findViewById(R.id.edtdipasangoleh);
+        editTextdeskripsi = findViewById(R.id.edtdeskripsi);
+        editTextCaraPenanggulangan = findViewById(R.id.edtcarapenanggulangan);
+        String photo = "photo";
         storageReference = FirebaseStorage.getInstance().getReference("uploadphotoswhiteform");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploadphotoswhiteform");
 
@@ -77,6 +103,8 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                 openFileChooser();
             }
         });
+
+        //Button Tanggal Pemasangan On Click
         Button btntglpasang = findViewById(R.id.btntglpasang);
         btntglpasang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,17 +114,16 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                 tglPasangPicker.show(getSupportFragmentManager(), "date picker");
             }
         });
+
+
         
         btnsubmitwhiteform.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(uploadTask !=null && uploadTask.isInProgress()) {
-                    Toast.makeText(NewWhiteFormActivity.this, "Upload in progress", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    uploadFile();
-                }
+                newWhiteForm();
+
+
             }
         });
 
@@ -111,6 +138,127 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         });
     }
 
+    //submit form
+    private void newWhiteForm() {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Sending New Form...");
+        progressDialog.show();
+
+        //getting new white form values
+
+        String nomor_kontrol = editTextNomorKontrol.getText().toString().trim();
+        String bagian_mesin = editTextBagianMesin.getText().toString().trim();
+        String dipasang_oleh = editTextdipasangoleh.getText().toString().trim();
+        String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
+        String deskripsi = editTextdeskripsi.getText().toString().trim();
+        String photo = "photo";
+        String due_date = textViewDueDate.getText().toString().trim();
+        String cara_penanggulangan =  editTextCaraPenanggulangan.toString().trim();
+
+        //validation
+
+        if (TextUtils.isEmpty(nomor_kontrol)) {
+            editTextNomorKontrol.setError("Masukkan Nomor Kontrol");
+            editTextNomorKontrol.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(bagian_mesin)) {
+            editTextBagianMesin.setError("Masukkan Bagian Mesin");
+            editTextBagianMesin.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(dipasang_oleh)) {
+            editTextdipasangoleh.setError("Masukkan Nama");
+            editTextdipasangoleh.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(deskripsi)) {
+            editTextdeskripsi.setError("Masukkan Deskripsi");
+            editTextdeskripsi.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(cara_penanggulangan)) {
+            editTextCaraPenanggulangan.setError("Masukkan Data");
+            editTextCaraPenanggulangan.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+
+
+        if (textViewTanggalPasang.getText().toString().matches("")) {
+            textViewTanggalPasang.setError("Masukkan Tanggal");
+            textViewTanggalPasang.requestFocus();
+            progressDialog.dismiss();
+            Toast.makeText(NewWhiteFormActivity.this, "Masukkan Tanggal", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (textViewDueDate.getText().toString().matches("")) {
+            textViewDueDate.setError("Masukkan Tanggal");
+            textViewDueDate.requestFocus();
+            progressDialog.dismiss();
+            Toast.makeText(NewWhiteFormActivity.this, "Masukkan Tanggal", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //building retrofit object
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        //Defining retrofit api service
+        APIService service = retrofit.create(APIService.class);
+
+        Call<NewWhiteFormResponse> call = service.sendNewWhiteForm(
+                nomor_kontrol,
+                bagian_mesin,
+                dipasang_oleh,
+                tgl_pasang,
+                deskripsi,
+                photo,
+                due_date,
+                cara_penanggulangan
+        );
+
+        //calling the api
+        call.enqueue(new Callback<NewWhiteFormResponse>() {
+            @Override
+            public void onResponse(Call<NewWhiteFormResponse> call, Response<NewWhiteFormResponse> response) {
+
+                progressDialog.dismiss();
+                //displaying the message from the response
+                Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+
+                if(uploadTask !=null && uploadTask.isInProgress()) {
+                    Toast.makeText(NewWhiteFormActivity.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    uploadFile();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewWhiteFormResponse> call, Throwable t) {
+
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+    }
+
     private String getFileExtension(Uri uri) {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -118,7 +266,15 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
     }
 
     private void uploadFile() {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Upload Photo...");
+        progressDialog.show();
+
         if(imageUri !=null) {
+
+
+
             StorageReference fileReference = storageReference.child(System.currentTimeMillis()
                     +"."+ getFileExtension(imageUri));
 
@@ -133,6 +289,7 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                                     progressBar.setProgress(0);
                                 }
                             }, 500);
+                            progressDialog.dismiss();
                             Toast.makeText(NewWhiteFormActivity.this, "Upload photo successful", Toast.LENGTH_LONG).show();
                             UploadPhotoWhiteForm upload = new UploadPhotoWhiteForm(editTextNomorKontrol.getText().toString().trim(),
                                     storageReference.getDownloadUrl().toString());
@@ -143,6 +300,7 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(NewWhiteFormActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -154,7 +312,8 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                         }
                     });
         } else {
-            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+            Toast.makeText(this, "Tidak ada foto yang dipilih", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -189,11 +348,12 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
 
         if(flag == TANGGAL_PASANG) {
             TextView tvtglpasang = findViewById(R.id.tvtglpasang);
-            tvtglpasang.setText(currentDateString);
+            tvtglpasang.setText(year+"-"+month+"-"+dayOfMonth);
+
         }
         else if (flag == DUE_DATE) {
             TextView tvdueDate = findViewById(R.id.tvduedate);

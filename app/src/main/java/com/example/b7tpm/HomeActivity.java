@@ -91,6 +91,11 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, InformasiTPMActivity.class);
             startActivity(intent);
         }
+
+        if (menuGrid.getName() == "Menu RCA") {
+            Intent intent = new Intent(HomeActivity.this, MenuRCAActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

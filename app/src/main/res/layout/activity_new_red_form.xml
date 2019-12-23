@@ -42,7 +42,8 @@
             android:layout_marginRight="20dp"
             app:met_floatingLabel="highlight"
             android:textSize="16sp"
-            android:hint="Nomor Kontrol"/>
+            android:hint="Nomor Kontrol"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtbagianmesin"
@@ -53,7 +54,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Bagian Mesin"/>
+            android:hint="Bagian Mesin"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtdipasangoleh"
@@ -64,7 +66,8 @@
             android:layout_marginRight="20dp"
             app:met_floatingLabel="highlight"
             android:textSize="16sp"
-            android:hint="Dipasang Oleh"/>
+            android:hint="Dipasang Oleh"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -73,7 +76,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="16sp"
-            android:text = "Tanggal Pemasangan" />
+            android:text = "Tanggal Pemasangan"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <Button
             android:id="@+id/btntglpasang"
@@ -104,7 +108,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Deskripsi"/>
+            android:hint="Deskripsi"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -141,8 +146,10 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="16sp"
+            android:enabled="false"
             app:met_floatingLabel="highlight"
-            android:hint="Nomor Work Request" />
+            android:hint="Nomor Work Request"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtpicfollowup"
@@ -153,7 +160,9 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="PIC Follow UP" />
+            android:enabled="false"
+            android:hint="PIC Follow UP"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
 
         <TextView
@@ -194,7 +203,8 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
-            android:hint="Cara Penanggulangan"/>
+            android:hint="Cara Penanggulangan"
+            app:met_primaryColor="@android:color/holo_red_light"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"

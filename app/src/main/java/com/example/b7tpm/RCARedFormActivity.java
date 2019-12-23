@@ -1,17 +1,17 @@
 package com.example.b7tpm;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.b7tpm.Adapter.RCARedFormAdapter;
 import com.example.b7tpm.Adapter.RCAWhiteFormAdapter;
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
-import com.example.b7tpm.Model.WhiteFormClose;
+import com.example.b7tpm.Model.RedFormClose;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,21 +19,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RCAWhiteFormActivity extends AppCompatActivity implements View.OnClickListener {
+public class RCARedFormActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private CardView cardViewWhiteForm, cardViewRedForm;
-
-    private RecyclerView recyclerViewWhiteForms;
+    private RecyclerView recyclerViewRedForm;
     private RecyclerView.Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rca_white_form);
+        setContentView(R.layout.activity_rcared_form);
 
-        recyclerViewWhiteForms = findViewById(R.id.rv_rcawhiteform);
-        recyclerViewWhiteForms.setHasFixedSize(true);
-        recyclerViewWhiteForms.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewRedForm = findViewById(R.id.rv_rcaredform);
+        recyclerViewRedForm.setHasFixedSize(true);
+        recyclerViewRedForm.setLayoutManager(new LinearLayoutManager(this));
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(APIUrl.BASE_URL)
@@ -42,22 +40,20 @@ public class RCAWhiteFormActivity extends AppCompatActivity implements View.OnCl
 
         APIService service = retrofit.create(APIService.class);
 
-        Call<WhiteFormClose> call = service.getWhiteFormClose();
+        Call<RedFormClose> call = service.getRedFormClose();
 
-        call.enqueue(new Callback<WhiteFormClose>() {
+        call.enqueue(new Callback<RedFormClose>() {
             @Override
-            public void onResponse(Call<WhiteFormClose> call, Response<WhiteFormClose> response) {
-                adapter = new RCAWhiteFormAdapter(response.body().getWhiteformclose(), getApplicationContext());
-                recyclerViewWhiteForms.setAdapter(adapter);
-
+            public void onResponse(Call<RedFormClose> call, Response<RedFormClose> response) {
+                adapter = new RCARedFormAdapter(response.body().getRedformclose(), getApplicationContext());
+                recyclerViewRedForm.setAdapter(adapter);
             }
 
             @Override
-            public void onFailure(Call<WhiteFormClose> call, Throwable t) {
+            public void onFailure(Call<RedFormClose> call, Throwable t) {
 
             }
         });
-
 
     }
 
