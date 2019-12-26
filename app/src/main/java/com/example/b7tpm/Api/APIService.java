@@ -1,5 +1,6 @@
 package com.example.b7tpm.Api;
 
+import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.RedFormClose;
 import com.example.b7tpm.Model.WhiteFormClose;
@@ -45,6 +46,22 @@ public interface APIService {
             @Field("photo") String photo,
             @Field("due_date") String due_date,
             @Field("cara_penanggulangan") String cara_penanggulangan
+    );
+
+    @FormUrlEncoded
+    @POST("newredform")
+    Call<NewRedFormResponse> sendNewRedForm (
+            @Field("nomor_kontrol") String nomor_kontrol,
+            @Field("bagian_mesin") String bagian_mesin,
+            @Field("dipasang_oleh") String dipasang_oleh,
+            @Field("tgl_pasang") String tgl_pasang,
+            @Field("deskripsi") String deskripsi,
+            @Field("photo") String photo,
+            @Field("nomor_work_request") String nomor_work_request,
+            @Field("pic_follow_up") String pic_follow_up,
+            @Field("due_date") String due_date,
+            @Field("cara_penanggulangan") String cara_penanggulangan
+
     );
 
     @GET("whiteform/close")

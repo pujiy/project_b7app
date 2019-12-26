@@ -119,7 +119,7 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             android:text="Upload Gambar"
-            app:met_primaryColor="@android:color/holo_green_dark"/>
+            />
 
         <Button
             android:id="@+id/btnuploadgambar"
@@ -139,6 +139,17 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             tools:src="@drawable/ic_administrasi" />
+
+        <TextView
+            android:id="@+id/tv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="16sp"
+            tools:text="images.jpg"
+            />
 
         <TextView
 
