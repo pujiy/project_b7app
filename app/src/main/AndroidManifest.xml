@@ -11,7 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailRedFormActivity"></activity>
+        <activity android:name=".DetailStatusWhiteFormActivity"></activity>
+        <activity android:name=".StatusWhiteFormActivity" />
+        <activity android:name=".StatusFormMenuActivity" />
+        <activity android:name=".EditAdministrasiWhiteFormActivity" />
+        <activity android:name=".AdministrasiWhiteFormActivity" />
+        <activity android:name=".AdministrasiFormActivity" />
+        <activity android:name=".DetailRedFormActivity" />
         <activity android:name=".DetailWhiteFormActivity" />
         <activity android:name=".RCARedFormActivity" />
         <activity android:name=".RCAWhiteFormActivity" />

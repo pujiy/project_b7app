@@ -87,6 +87,16 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        if (menuGrid.getName() == "Administrasi Form") {
+            Intent intent = new Intent(HomeActivity.this, AdministrasiFormActivity.class);
+            startActivity(intent);
+        }
+
+        if (menuGrid.getName() == "Status Form") {
+            Intent intent = new Intent(HomeActivity.this, StatusFormMenuActivity.class);
+            startActivity(intent);
+        }
+
         if (menuGrid.getName() == "Informasi TPM") {
             Intent intent = new Intent(HomeActivity.this, InformasiTPMActivity.class);
             startActivity(intent);
