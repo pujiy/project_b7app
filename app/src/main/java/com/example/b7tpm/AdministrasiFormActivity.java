@@ -37,6 +37,8 @@ public class AdministrasiFormActivity extends AppCompatActivity implements View.
     }
 
     private void administrasiRedForm() {
+        Intent intent = new Intent(AdministrasiFormActivity.this, AdministrasiRedFormActivity.class);
+        startActivity(intent);
 
     }
 

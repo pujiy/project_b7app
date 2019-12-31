@@ -63,6 +63,7 @@ public class AdministrasiWhiteFormAdapter extends RecyclerView.Adapter<Administr
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_DUEDATE, duedate);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_CARAPENANGGULANGAN, carapenanggulangan);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_PHOTO, photo);
+                moveWithDataIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ctx.startActivity(moveWithDataIntent);
 
 

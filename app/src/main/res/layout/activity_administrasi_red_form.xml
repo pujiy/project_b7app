@@ -6,27 +6,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/gradient_backround"
-    tools:context=".AdministrasiWhiteFormActivity">
+    tools:context=".AdministrasiRedFormActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#FFFFFF">
+        android:background="#E53935">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Administrasi White Form"
+            android:text="Administrasi Red Form"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:textStyle="bold"
             android:textSize="20sp"/>
 
 
+
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_administrasiwhiteform"
+        android:id="@+id/rv_administrasiredform"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

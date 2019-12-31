@@ -64,6 +64,7 @@ public class StatusWhiteFormAdapter extends RecyclerView.Adapter<StatusWhiteForm
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_CARAPENANGGULANGAN, carapenanggulangan);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_PHOTO, photo);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_STATUS, status);
+                moveWithDataIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ctx.startActivity(moveWithDataIntent);
 
 

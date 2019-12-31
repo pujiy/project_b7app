@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DetailRedFormActivity">
+    tools:context=".DetailStatusRedFormActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,35 +20,25 @@
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Detail Red Form"
+                android:text="Detail Status Red Form"
                 android:textSize="18sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"/>
 
+
             <Button
                 android:id="@+id/btn_edit"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_edit_white_50dp"
-                android:layout_toLeftOf="@+id/btn_print"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
-
-            <Button
-                android:id="@+id/btn_print"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_print_white_50dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
         </RelativeLayout>
     </FrameLayout>
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -62,10 +52,23 @@
             android:layout_marginRight="20dp"
             android:orientation="vertical">
 
-
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textSize="16sp"/>
 
             <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Open"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nomor Kontrol"
@@ -162,7 +165,7 @@
                 android:id="@+id/tv_nomorworkrequest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="2312ABCD"
+                tools:text="2311231"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp" />
@@ -216,4 +219,5 @@
         </LinearLayout>
 
     </ScrollView>
+
 </LinearLayout>

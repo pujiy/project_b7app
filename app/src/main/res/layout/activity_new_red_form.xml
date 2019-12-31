@@ -193,18 +193,19 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:enabled="false"
             android:background="@drawable/ic_date_range_black_24dp"
             />
 
         <TextView
-            android:id="@+id/tvduedate"
+            android:id="@+id/tv_duedate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="16sp"
-            tools:text = "image.jpg" />
+            android:text = "0000-00-00" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtcarapenanggulangan"
@@ -215,7 +216,9 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
+            android:enabled="false"
             android:hint="Cara Penanggulangan"
+            android:text=" - "
             app:met_primaryColor="@android:color/holo_red_light"/>
 
         <ProgressBar
@@ -232,13 +235,13 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/btn_submit_white_form"
+                android:id="@+id/btn_submit_red_form"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/button_register"
+                android:background="@drawable/button_submit"
                 android:layout_centerHorizontal="true"/>
 
 

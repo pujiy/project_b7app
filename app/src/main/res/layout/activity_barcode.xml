@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BarcodeActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:text="Barcode Scanner"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nomor Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_nomormesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1234DFGH"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_namamesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mesin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Merk Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_merkmesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mesin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kapasitas Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_kapasitasmesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="500"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jenis Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_jenismesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Jenis Mesin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fungsi Mesin"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp" />
+        <TextView
+            android:id="@+id/tv_fungsimesin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mesin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
+            <Button
+                android:id="@+id/btn_scanqr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="SCAN QR"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

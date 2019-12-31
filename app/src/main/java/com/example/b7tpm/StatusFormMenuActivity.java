@@ -28,6 +28,15 @@ public class StatusFormMenuActivity extends AppCompatActivity implements View.On
         if(view == cardViewStatusWhiteForm) {
             statusWhiteForm();
         }
+
+        else if (view == cardViewStatusRedForm) {
+            statusRedForm();
+        }
+    }
+
+    private void statusRedForm() {
+        Intent intent = new Intent(StatusFormMenuActivity.this, StatusRedFormActivity.class);
+        startActivity(intent);
     }
 
     private void statusWhiteForm() {

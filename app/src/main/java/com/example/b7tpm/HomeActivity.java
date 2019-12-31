@@ -36,6 +36,10 @@ public class HomeActivity extends AppCompatActivity {
         textViewLevel = findViewById(R.id.tv_level);
         buttonLogout = findViewById(R.id.btn_logout);
 
+        if(getIntent().getBooleanExtra("EXITAPP", false)) {
+            this.finish();
+        }
+
         //getting the current user
         User user = SharedPrefManager.getInstance(this).getUser();
 
@@ -55,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                SharedPrefManager.getInstance(getApplicationContext()).logout();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
@@ -94,6 +99,11 @@ public class HomeActivity extends AppCompatActivity {
 
         if (menuGrid.getName() == "Status Form") {
             Intent intent = new Intent(HomeActivity.this, StatusFormMenuActivity.class);
+            startActivity(intent);
+        }
+
+        if (menuGrid.getName() == "Barcode Scanner") {
+            Intent intent = new Intent(HomeActivity.this, BarcodeActivity.class);
             startActivity(intent);
         }
 

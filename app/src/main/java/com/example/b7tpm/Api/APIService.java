@@ -1,10 +1,13 @@
 package com.example.b7tpm.Api;
 
+import com.example.b7tpm.Model.AdministrasiRedForm;
 import com.example.b7tpm.Model.AdministrasiWhiteForm;
 import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.RedFormClose;
+import com.example.b7tpm.Model.StatusRedForm;
 import com.example.b7tpm.Model.StatusWhiteForm;
+import com.example.b7tpm.Model.UpdateStatusRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
 import com.example.b7tpm.Model.WhiteForm;
 import com.example.b7tpm.Model.WhiteFormClose;
@@ -84,10 +87,33 @@ public interface APIService {
     );
 
     @FormUrlEncoded
+    @POST("updateredform/{formid}")
+    Call<NewRedFormResponse> updateRedForm (
+            @Path("formid") int formid,
+            @Field("nomor_kontrol") String nomor_kontrol,
+            @Field("bagian_mesin") String bagian_mesin,
+            @Field("dipasang_oleh") String dipasang_oleh,
+            @Field("tgl_pasang") String tgl_pasang,
+            @Field("deskripsi") String deskripsi,
+            @Field("photo") String photo,
+            @Field("nomor_work_request") String nomorworkrequest,
+            @Field("pic_follow_up") String picfollowup,
+            @Field("due_date") String due_date,
+            @Field("cara_penanggulangan") String cara_penanggulangan
+    );
+
+    @FormUrlEncoded
     @POST("updatestatuswhiteform/{formid}")
     Call<UpdateStatusWhiteFormResponse> updateStatusWhiteForm (
             @Path("formid") int formid,
             @Field("status") String nomor_kontrol
+    );
+
+    @FormUrlEncoded
+    @POST("updatestatusredform/{formid}")
+    Call<UpdateStatusRedFormResponse> updateStatusRedForm (
+      @Path("formid") int formid,
+      @Field("status") String nomor_kontrol
     );
 
     @GET("whiteform/close")
@@ -95,6 +121,9 @@ public interface APIService {
 
     @GET("allwhiteform")
     Call<AdministrasiWhiteForm> getAdministrasiWhiteForm();
+
+    @GET("allredform")
+    Call<AdministrasiRedForm> getAdministrasiRedForm();
 
     @GET("redform/close")
     Call<RedFormClose> getRedFormClose();
@@ -104,4 +133,7 @@ public interface APIService {
 
     @GET("whiteformstatus")
     Call<StatusWhiteForm> getStatusWhiteForm();
+
+    @GET("redformstatus")
+    Call<StatusRedForm> getStatusRedForm();
 }
