@@ -2,6 +2,7 @@ package com.example.b7tpm.Api;
 
 import com.example.b7tpm.Model.AdministrasiRedForm;
 import com.example.b7tpm.Model.AdministrasiWhiteForm;
+import com.example.b7tpm.Model.DataMesin;
 import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.RedFormClose;
@@ -136,4 +137,12 @@ public interface APIService {
 
     @GET("redformstatus")
     Call<StatusRedForm> getStatusRedForm();
+
+    @GET("datamesin/{nomormesin}")
+    Call<DataMesin> getDataMesin (
+            @Path("nomormesin") String nomor_mesin
+    );
+    //getting messages
+   /* @GET("messages/{id}")
+    Call<Messages> getMessages(@Path("id") int id); */
 }

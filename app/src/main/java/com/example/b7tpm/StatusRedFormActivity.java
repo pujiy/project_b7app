@@ -37,6 +37,9 @@ public class StatusRedFormActivity extends AppCompatActivity {
         recyclerViewStatusRedForm.setHasFixedSize(true);
         recyclerViewStatusRedForm.setLayoutManager(new LinearLayoutManager(this));
 
+
+
+
         //Building Retrofit Object
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(APIUrl.BASE_URL)

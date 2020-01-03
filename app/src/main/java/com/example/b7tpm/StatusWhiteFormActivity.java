@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.b7tpm.Adapter.AdministrasiWhiteFormAdapter;
@@ -37,6 +39,9 @@ public class StatusWhiteFormActivity extends AppCompatActivity {
         recyclerViewStatusWhiteForm = findViewById(R.id.rv_statuswhiteform);
         recyclerViewStatusWhiteForm.setHasFixedSize(true);
         recyclerViewStatusWhiteForm.setLayoutManager(new LinearLayoutManager(this));
+
+
+
 
         //Building Retrofit Object
         Retrofit retrofit = new Retrofit.Builder()

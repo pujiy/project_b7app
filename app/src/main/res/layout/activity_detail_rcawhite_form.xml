@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    tools:context=".DetailStatusWhiteFormActivity">
+    tools:context=".DetailRCAWhiteFormActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,23 +19,14 @@
                 android:id="@+id/tv_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Detail Status White Form"
+                android:text="Detail RCA White Form"
                 android:textSize="18sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:textStyle="bold"/>
 
 
-            <Button
-                android:id="@+id/btn_edit"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_edit_black_24dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:enabled="false"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+
         </RelativeLayout>
     </FrameLayout>
 

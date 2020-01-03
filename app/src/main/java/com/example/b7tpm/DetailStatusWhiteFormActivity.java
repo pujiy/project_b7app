@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Helper.SharedPrefManager;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
+import com.example.b7tpm.Model.User;
 import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
@@ -82,6 +84,13 @@ public class DetailStatusWhiteFormActivity extends AppCompatActivity {
         textViewCaraPenanggulangan.setText(carapenanggulangan);
         Picasso.get().load(photo).into(imageViewPhoto);
 
+        //getting the current user
+        User user = SharedPrefManager.getInstance(this).getUser();
+
+        if (user.getIsuser() == 0) {
+            buttonEdit.setEnabled(true);
+        }
+
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,8 +123,7 @@ public class DetailStatusWhiteFormActivity extends AppCompatActivity {
 
                                 //displaying the message from the response
                                 Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(DetailStatusWhiteFormActivity.this, HomeActivity.class);
-                                startActivity(intent);
+
                             }
 
                             @Override

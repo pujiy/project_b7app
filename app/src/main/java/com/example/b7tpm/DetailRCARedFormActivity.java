@@ -1,31 +1,15 @@
 package com.example.b7tpm;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.b7tpm.Api.APIService;
-import com.example.b7tpm.Api.APIUrl;
-import com.example.b7tpm.Helper.SharedPrefManager;
-import com.example.b7tpm.Model.UpdateStatusRedFormResponse;
-import com.example.b7tpm.Model.User;
 import com.squareup.picasso.Picasso;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class DetailStatusRedFormActivity extends AppCompatActivity {
+public class DetailRCARedFormActivity extends AppCompatActivity {
 
     public static final String EXTRA_FORMID = "formid";
     public static final String EXTRA_NOMORKONTROL = "nomor_kontrol";
@@ -48,7 +32,7 @@ public class DetailStatusRedFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_status_red_form);
+        setContentView(R.layout.activity_detail_rcared_form);
 
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
@@ -89,64 +73,5 @@ public class DetailStatusRedFormActivity extends AppCompatActivity {
         textViewDueDate.setText(duedate);
         textViewCaraPenanggulangan.setText(carapenanggulangan);
         Picasso.get().load(photo).into(imageViewPhoto);
-
-        //getting the current user
-        User user = SharedPrefManager.getInstance(this).getUser();
-
-        if (user.getIsuser() == 0) {
-            buttonEdit.setEnabled(true);
-        }
-
-
-        buttonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailStatusRedFormActivity.this);
-                builder.setTitle("Update Status");
-
-                builder.setItems(listStatus, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String status = listStatus[which];
-                        //building retrofit object
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(APIUrl.BASE_URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        //Defining retrofit api service
-                        APIService service = retrofit.create(APIService.class);
-
-                        Call<UpdateStatusRedFormResponse> call = service.updateStatusRedForm(
-                                formid,
-                                status
-                        );
-
-                        //calling the api
-                        call.enqueue(new Callback<UpdateStatusRedFormResponse>() {
-                            @Override
-                            public void onResponse(Call<UpdateStatusRedFormResponse> call, Response<UpdateStatusRedFormResponse> response) {
-
-                                //displaying the message from the response
-                                Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<UpdateStatusRedFormResponse> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-
-                            }
-                        });
-
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            }
-        });
     }
 }

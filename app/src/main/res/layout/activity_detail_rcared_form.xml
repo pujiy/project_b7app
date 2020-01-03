@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetailRCARedFormActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E53935">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+
+        <TextView
+            android:id="@+id/tv_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detail RCA Red Form"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+
+
+
+    </RelativeLayout>
+</FrameLayout>
+
+<ScrollView
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_marginLeft="24dp"
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Open"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nomor Kontrol"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_nomorkontrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1234DFGH"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bagian Mesin"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_bagianmesin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Mesin"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dipasang oleh"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_dipasangoleh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="user"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal Pemasangan"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_tglpasang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="22 Desember 2019"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deskripsi"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_deskripsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="test deskripsi"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gambar"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"/>
+
+    <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nomor Work Request"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_nomorworkrequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="2311231"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PIC Follow Up"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_picfollowup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="User"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Due Date"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_duedate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="23 Desember 2019"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cara Penanggulangan"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:id="@+id/tv_carapenanggulangan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="testing"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"/>
+
+</LinearLayout>
+
+</ScrollView>
+
+</LinearLayout>

@@ -3,6 +3,7 @@
     package="com.example.b7tpm">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailStatusRedFormActivity"></activity>
+        <activity android:name=".DetailRCARedFormActivity"></activity>
+        <activity android:name=".DetailRCAWhiteFormActivity" />
+        <activity android:name=".DetailStatusRedFormActivity" />
         <activity android:name=".StatusRedFormActivity" />
         <activity android:name=".BarcodeActivity" />
         <activity android:name=".EditAdministrasiRedFormActivity" />
@@ -33,9 +36,9 @@
         <activity android:name=".NewFormActivity" />
         <activity android:name=".InfoActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreenActivity" />
+        <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".HomeActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

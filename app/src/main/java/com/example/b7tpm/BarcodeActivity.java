@@ -10,8 +10,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b7tpm.Api.APIService;
+import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Model.DataMesin;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BarcodeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,10 +60,33 @@ public class BarcodeActivity extends AppCompatActivity implements View.OnClickLi
             }
             else {
                 Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(APIUrl.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                APIService service = retrofit.create(APIService.class);
+
+                Call<DataMesin> call =service.getDataMesin(result.getContents());
+
+                call.enqueue(new Callback<DataMesin>() {
+                    @Override
+                    public void onResponse(Call<DataMesin> call, Response<DataMesin> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataMesin> call, Throwable t) {
+
+                    }
+                });
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data); }
     }
+
+
 
     @Override
     public void onClick(View v) {
