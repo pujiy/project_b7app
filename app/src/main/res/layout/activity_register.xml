@@ -7,11 +7,15 @@
     android:background="#F1F0FA"
     tools:context=".RegisterActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/logo"
@@ -151,7 +155,8 @@
             android:text="@string/textview_case_login"
             android:layout_centerHorizontal="true" />
 
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

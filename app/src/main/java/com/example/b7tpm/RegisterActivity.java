@@ -2,12 +2,14 @@ package com.example.b7tpm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.b7tpm.Api.APIService;
@@ -25,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private Button buttonSignUp;
     private EditText editTextUsername, editTextEmail, editTextPassword, editTextNik;
+    private TextView textViewLogin;
     private CheckBox checkBoxRegister;
     private int isUser, isSpv, isAdmin, isVerified;
 
@@ -37,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextUsername = findViewById(R.id.edt_username);
         editTextEmail = findViewById(R.id.edt_email);
         editTextNik = findViewById(R.id.edt_nik);
+        textViewLogin = findViewById(R.id.tv_login);
         editTextPassword = findViewById(R.id.edt_password_signup);
         checkBoxRegister = findViewById(R.id.cb_register);
 
@@ -140,5 +144,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             userSignUp();
         }
 
+        if(view == textViewLogin) {
+            toLogin();
+        }
+
+    }
+
+    private void toLogin() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

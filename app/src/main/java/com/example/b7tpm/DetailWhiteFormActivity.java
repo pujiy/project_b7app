@@ -18,7 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b7tpm.Api.APIService;
+import com.example.b7tpm.Api.APIUrl;
 import com.example.b7tpm.Helper.SharedPrefManager;
+import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
 import com.example.b7tpm.Model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,6 +39,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailWhiteFormActivity extends AppCompatActivity {
 
@@ -134,12 +143,74 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
                         printPdf();
 
+                        String status = "Open";
+                        //building retrofit object
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(APIUrl.BASE_URL)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        //Defining retrofit api service
+                        APIService service = retrofit.create(APIService.class);
+
+                        Call<UpdateStatusWhiteFormResponse> call = service.updateStatusWhiteForm(
+                                formid,
+                                status
+                        );
+
+                        //calling api
+                        call.enqueue(new Callback<UpdateStatusWhiteFormResponse>() {
+                            @Override
+                            public void onResponse(Call<UpdateStatusWhiteFormResponse> call, Response<UpdateStatusWhiteFormResponse> response) {
+
+                                Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<UpdateStatusWhiteFormResponse> call, Throwable t) {
+
+                                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+
                     }
                 }
 
                 else {
 
                     printPdf();
+
+                    String status = "Open";
+                    //building retrofit object
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(APIUrl.BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    //Defining retrofit api service
+                    APIService service = retrofit.create(APIService.class);
+
+                    Call<UpdateStatusWhiteFormResponse> call = service.updateStatusWhiteForm(
+                            formid,
+                            status
+                    );
+
+                    //calling api
+                    call.enqueue(new Callback<UpdateStatusWhiteFormResponse>() {
+                        @Override
+                        public void onResponse(Call<UpdateStatusWhiteFormResponse> call, Response<UpdateStatusWhiteFormResponse> response) {
+
+                            Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<UpdateStatusWhiteFormResponse> call, Throwable t) {
+
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
 
                 }
             }
@@ -168,10 +239,30 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
             String detail = textViewDetail.getText().toString().trim();
             String nomorKontrol = "Nomor Kontrol \n" + textViewNomorKontrol.getText().toString().trim();
-
+            String bagianMesin = "Bagian Mesin \n" + textViewBagianMesin.getText().toString().trim();
+            String dipasangOleh = "Dipasang oleh \n" + textViewDipasangOleh.getText().toString().trim();
+            String tglPasang = "Tanggal Pemasangan \n" + textViewTglPasang.getText().toString().trim();
+            String deskripsi = "Deskripsi \n" + textViewDeskripsi.getText().toString().trim();
+            String dueDate = "Due Date \n" + textViewDueDate.getText().toString().trim();
+            String caraPenanggulangan = "Cara Penanggulangan \n" + textViewCaraPenanggulangan.getText().toString().trim();
+            String spasi = " \n";
 
             newPdf.add(new Paragraph(detail));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(nomorKontrol));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(bagianMesin));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(dipasangOleh));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(tglPasang));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(deskripsi));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(dueDate));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(caraPenanggulangan));
 
 
             newPdf.close();

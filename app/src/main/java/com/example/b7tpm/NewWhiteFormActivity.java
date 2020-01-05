@@ -447,15 +447,16 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
+        int month1= month + 1;
 
         if(flag == TANGGAL_PASANG) {
             TextView tvtglpasang = findViewById(R.id.tvtglpasang);
-            tvtglpasang.setText(year+"-"+month+"-"+dayOfMonth);
+            tvtglpasang.setText(year+"-"+month1+"-"+dayOfMonth);
 
         }
         else if (flag == DUE_DATE) {
             TextView tvdueDate = findViewById(R.id.tvduedate);
-            tvdueDate.setText(year+"-"+month+"-"+dayOfMonth);
+            tvdueDate.setText(year+"-"+month1+"-"+dayOfMonth);
         }
 
 
