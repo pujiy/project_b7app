@@ -116,6 +116,11 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, MenuRCAActivity.class);
             startActivity(intent);
         }
+
+        if (menuGrid.getName() == "Users") {
+            Intent intent = new Intent(HomeActivity.this, StatusLevelUserActivity.class);
+            startActivity(intent);
+        }
     }
 
 }

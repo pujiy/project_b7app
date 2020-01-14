@@ -21,16 +21,23 @@ import android.widget.Toast;
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
 import com.example.b7tpm.Helper.SharedPrefManager;
+import com.example.b7tpm.Model.DeleteWhiteFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
 import com.example.b7tpm.Model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
 
@@ -60,7 +67,7 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
     private TextView textViewDetail;
     private TextView textViewNomorKontrol, textViewBagianMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
-    private Button buttonEdit, buttonPrint;
+    private Button buttonEdit, buttonPrint, buttonDelete;
     private static final int STORAGE_CODE = 1000;
 
     @Override
@@ -70,7 +77,6 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
 
         textViewDetail = findViewById(R.id.tv_detail);
-
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
         textViewDipasangOleh = findViewById(R.id.tv_dipasangoleh);
@@ -81,6 +87,7 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
         imageViewPhoto = findViewById(R.id.iv_photo);
         buttonEdit = findViewById(R.id.btn_edit);
         buttonPrint = findViewById(R.id.btn_print);
+        buttonDelete = findViewById(R.id.btn_delete);
 
 
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
@@ -164,6 +171,7 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
                             public void onResponse(Call<UpdateStatusWhiteFormResponse> call, Response<UpdateStatusWhiteFormResponse> response) {
 
                                 Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
                             }
 
                             @Override
@@ -216,6 +224,38 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
             }
         });
 
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //building retrofit object
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(APIUrl.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                //Defining retrofit api service
+                APIService service = retrofit.create(APIService.class);
+
+                Call<DeleteWhiteFormResponse> call = service.deleteWhiteForm(
+                        formid
+                );
+
+                call.enqueue(new Callback<DeleteWhiteFormResponse>() {
+                    @Override
+                    public void onResponse(Call<DeleteWhiteFormResponse> call, Response<DeleteWhiteFormResponse> response) {
+                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(DetailWhiteFormActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<DeleteWhiteFormResponse> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
 
 
     }
@@ -231,38 +271,78 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
 
         try {
-            PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
+            PdfWriter writer = PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
 
+            Rectangle one = new Rectangle(280,396);
+            newPdf.setPageSize(one);
+            newPdf.setMargins(2, 2, 2, 2);
             newPdf.open();
 
 
 
             String detail = textViewDetail.getText().toString().trim();
-            String nomorKontrol = "Nomor Kontrol \n" + textViewNomorKontrol.getText().toString().trim();
-            String bagianMesin = "Bagian Mesin \n" + textViewBagianMesin.getText().toString().trim();
-            String dipasangOleh = "Dipasang oleh \n" + textViewDipasangOleh.getText().toString().trim();
-            String tglPasang = "Tanggal Pemasangan \n" + textViewTglPasang.getText().toString().trim();
-            String deskripsi = "Deskripsi \n" + textViewDeskripsi.getText().toString().trim();
-            String dueDate = "Due Date \n" + textViewDueDate.getText().toString().trim();
-            String caraPenanggulangan = "Cara Penanggulangan \n" + textViewCaraPenanggulangan.getText().toString().trim();
+            String nomorKontrol = "Nomor Kontrol : " + textViewNomorKontrol.getText().toString().trim();
+            String bagianMesin = "Bagian Mesin : " + textViewBagianMesin.getText().toString().trim();
+            String dipasangOleh = "Dipasang oleh : " + textViewDipasangOleh.getText().toString().trim();
+            String tglPasang = "Tanggal Pemasangan : " + textViewTglPasang.getText().toString().trim();
+            String deskripsi = "Deskripsi : " + textViewDeskripsi.getText().toString().trim();
+            String dueDate = "Due Date : " + textViewDueDate.getText().toString().trim();
+            String caraPenanggulangan = textViewCaraPenanggulangan.getText().toString().trim();
             String spasi = " \n";
 
-            newPdf.add(new Paragraph(detail));
+
+            PdfContentByte canvas = writer.getDirectContent();
+            Rectangle rect = new Rectangle(0,354,276,396);
+            Rectangle rect2 = new Rectangle(0,100, 276, 130);
+            rect.setBorder(Rectangle.BOX);
+            rect2.setBorder(Rectangle.BOX);
+            rect.setBorderWidth(1);
+            rect2.setBorderWidth(1);
+            rect.setBackgroundColor(BaseColor.WHITE);
+            rect2.setBackgroundColor(BaseColor.WHITE);
+            rect.setBorderColor(BaseColor.BLACK);
+            rect2.setBorderColor(BaseColor.BLACK);
+            canvas.rectangle(rect);
+            canvas.rectangle(rect2);
+
+            ColumnText ct = new ColumnText(canvas);
+            ColumnText ct2 = new ColumnText(canvas);
+            ct.setSimpleColumn(rect);
+            ct2.setSimpleColumn(rect2);
+            ct.setAlignment(Element.ALIGN_CENTER);
+            ct2.setAlignment(Element.ALIGN_CENTER);
+            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+            Font isiFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+            catFont.setColor(BaseColor.BLACK);
+            Paragraph otherParagraph = new Paragraph("WHITE TAG \n Abnormality Tag", catFont);
+            otherParagraph.setAlignment(Element.ALIGN_CENTER);
+            Paragraph otherParagraph1 = new Paragraph("Penanggulangan", catFont);
+            otherParagraph1.setAlignment(Element.ALIGN_CENTER);
+            ct.addElement(otherParagraph);
+            ct2.addElement(otherParagraph1);
+            ct.go();
+            ct2.go();
+
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(nomorKontrol, isiFont));
             newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(bagianMesin, isiFont));
             newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(nomorKontrol));
+            newPdf.add(new Paragraph(dipasangOleh, isiFont));
             newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(bagianMesin));
+            newPdf.add(new Paragraph(tglPasang, isiFont));
             newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(dipasangOleh));
+            newPdf.add(new Paragraph(deskripsi, isiFont));
             newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(tglPasang));
+            newPdf.add(new Paragraph(dueDate, isiFont));
             newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(deskripsi));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(dueDate));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(caraPenanggulangan));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(caraPenanggulangan, isiFont));
 
 
             newPdf.close();

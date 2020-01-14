@@ -96,7 +96,6 @@ public class DetailStatusWhiteFormActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DetailStatusWhiteFormActivity.this);
                 builder.setTitle("Update Status");
-
                 builder.setItems(listStatus, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

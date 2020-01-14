@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
         buttonSignUp.setOnClickListener(this);
+        textViewLogin.setOnClickListener(this);
 
     }
 
@@ -138,6 +139,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private void toLogin() {
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View view) {
         if(view == buttonSignUp) {
@@ -150,7 +156,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void toLogin() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
+
 }

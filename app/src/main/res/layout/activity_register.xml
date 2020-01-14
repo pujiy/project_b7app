@@ -153,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_register"
             android:text="@string/textview_case_login"
+            android:layout_marginBottom="40dp"
             android:layout_centerHorizontal="true" />
 
         </RelativeLayout>

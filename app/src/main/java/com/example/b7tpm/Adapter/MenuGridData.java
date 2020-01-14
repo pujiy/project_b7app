@@ -13,7 +13,8 @@ public class MenuGridData {
             "Status Form",
             "Barcode Scanner",
             "Menu RCA",
-            "Informasi TPM"
+            "Informasi TPM",
+            "Users"
     };
 
     private static int[] menuImages = {
@@ -22,7 +23,8 @@ public class MenuGridData {
             R.drawable.ic_form_status,
             R.drawable.ic_barcode,
             R.drawable.ic_rca,
-            R.drawable.ic_info
+            R.drawable.ic_info,
+            R.drawable.ic_person_blue_50dp
     };
 
     public static ArrayList<MenuGrid> getListData() {

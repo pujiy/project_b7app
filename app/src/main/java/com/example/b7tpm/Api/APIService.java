@@ -3,12 +3,16 @@ package com.example.b7tpm.Api;
 import com.example.b7tpm.Model.AdministrasiRedForm;
 import com.example.b7tpm.Model.AdministrasiWhiteForm;
 import com.example.b7tpm.Model.DataMesin;
+import com.example.b7tpm.Model.DeleteRedFormResponse;
+import com.example.b7tpm.Model.DeleteWhiteFormResponse;
 import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.RedFormClose;
 import com.example.b7tpm.Model.ResultDataMesin;
 import com.example.b7tpm.Model.StatusRedForm;
+import com.example.b7tpm.Model.StatusUser;
 import com.example.b7tpm.Model.StatusWhiteForm;
+import com.example.b7tpm.Model.UpdateLevelUserResponse;
 import com.example.b7tpm.Model.UpdateStatusRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
 import com.example.b7tpm.Model.WhiteForm;
@@ -118,6 +122,27 @@ public interface APIService {
       @Field("status") String nomor_kontrol
     );
 
+    @FormUrlEncoded
+    @POST("updateleveluser/{email}")
+    Call<UpdateLevelUserResponse> updateLevelUser (
+            @Path("email") String email,
+            @Field("isuser") int isuser,
+            @Field("isadmin") int isadmin,
+            @Field("isspv") int isspv
+    );
+
+    @FormUrlEncoded
+    @POST("deletewhiteform")
+    Call<DeleteWhiteFormResponse> deleteWhiteForm (
+            @Field("formid") int formid
+    );
+
+    @FormUrlEncoded
+    @POST("deleteredform")
+    Call<DeleteRedFormResponse> deleteRedForm (
+            @Field("formid") int formid
+    );
+
     @GET("whiteform/close")
     Call<WhiteFormClose> getWhiteFormClose();
 
@@ -138,6 +163,11 @@ public interface APIService {
 
     @GET("redformstatus")
     Call<StatusRedForm> getStatusRedForm();
+
+    @GET("users")
+    Call<StatusUser> getStatusUser();
+
+
 
     @GET("datamesin/AB1C1234")
     Call<DataMesin> getDataMesin ();

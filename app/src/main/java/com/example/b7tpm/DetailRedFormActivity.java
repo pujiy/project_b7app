@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.icu.util.LocaleData;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,11 +18,18 @@ import android.widget.Toast;
 
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Model.DeleteRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
 
@@ -51,7 +59,7 @@ public class DetailRedFormActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO = "photo";
     private TextView textViewDetail, textViewNomorKontrol, textViewBagianMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewpicfollowup, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
-    private Button buttonEdit, buttonPrint;
+    private Button buttonEdit, buttonPrint, buttonDelete;
     private static final int STORAGE_CODE = 1000;
 
     @Override
@@ -71,6 +79,7 @@ public class DetailRedFormActivity extends AppCompatActivity {
         imageViewPhoto = findViewById(R.id.iv_photo);
         buttonEdit = findViewById(R.id.btn_edit);
         buttonPrint = findViewById(R.id.btn_print);
+        buttonDelete = findViewById(R.id.btn_delete);
         textViewDetail = findViewById(R.id.tv_detail);
 
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
@@ -204,8 +213,49 @@ public class DetailRedFormActivity extends AppCompatActivity {
 
             }
         });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //building retrofit object
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(APIUrl.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                //Defining retrofit api service
+                APIService service = retrofit.create(APIService.class);
+
+                Call<DeleteRedFormResponse> call = service.deleteRedForm(
+                        formid
+                );
+
+                call.enqueue(new Callback<DeleteRedFormResponse>() {
+                    @Override
+                    public void onResponse(Call<DeleteRedFormResponse> call, Response<DeleteRedFormResponse> response) {
+                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(DetailRedFormActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<DeleteRedFormResponse> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
     }
 
+    /*
+    PdfContentByte canvas = writer.getDirectContent();
+BaseColor bColor = new BaseColor(0xFF, 0xD0, 0x00);
+canvas.setColorFill(bColor);
+canvas.rectangle(rect.getLeft(), rect.getBottom() - 1.5f, rect.getWidth(), rect.getHeight());
+canvas.fillStroke();
+
+     */
     private void printPdf() {
 
         Document newPdf = new Document();
@@ -216,45 +266,82 @@ public class DetailRedFormActivity extends AppCompatActivity {
         String filePath = Environment.getExternalStorageDirectory() + "/" + fileNamePdf + ".pdf";
 
 
-        try {
-            PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
 
+        try {
+
+            PdfWriter writer = PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
+
+            Rectangle one = new Rectangle(280,396);
+            newPdf.setPageSize(one);
+            newPdf.setMargins(2, 2, 2, 2);
             newPdf.open();
 
 
 
             String detail = textViewDetail.getText().toString().trim();
-            String nomorKontrol = "Nomor Kontrol \n" + textViewNomorKontrol.getText().toString().trim();
-            String bagianMesin = "Bagian Mesin \n" + textViewBagianMesin.getText().toString().trim();
-            String dipasangOleh = "Dipasang oleh \n" + textViewDipasangOleh.getText().toString().trim();
-            String tglPasang = "Tanggal Pemasangan \n" + textViewTglPasang.getText().toString().trim();
-            String deskripsi = "Deskripsi \n" + textViewDeskripsi.getText().toString().trim();
-            String nomorworkrequest = "Nomor Work Request \n" + textViewNomorWorkRequest.getText().toString().trim();
-            String picfollowup = "PIC Follow Up \n" + textViewpicfollowup.getText().toString().trim();
-            String dueDate = "Due Date \n" + textViewDueDate.getText().toString().trim();
-            String caraPenanggulangan = "Cara Penanggulangan \n" + textViewCaraPenanggulangan.getText().toString().trim();
+            String nomorKontrol = "Nomor Kontrol : " + textViewNomorKontrol.getText().toString().trim();
+            String bagianMesin = "Bagian Mesin : " + textViewBagianMesin.getText().toString().trim();
+            String dipasangOleh = "Dipasang oleh : " + textViewDipasangOleh.getText().toString().trim();
+            String tglPasang = "Tanggal Pemasangan : " + textViewTglPasang.getText().toString().trim();
+            String deskripsi = "Deskripsi : " + textViewDeskripsi.getText().toString().trim();
+            String nomorworkrequest = "Nomor Work Request : " + textViewNomorWorkRequest.getText().toString().trim();
+            String picfollowup = "PIC Follow Up : " + textViewpicfollowup.getText().toString().trim();
+            String dueDate = "Due Date : " + textViewDueDate.getText().toString().trim();
+            String caraPenanggulangan = textViewCaraPenanggulangan.getText().toString().trim();
             String spasi = " \n";
 
-            newPdf.add(new Paragraph(detail));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(nomorKontrol));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(bagianMesin));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(dipasangOleh));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(tglPasang));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(deskripsi));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(nomorworkrequest));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(picfollowup));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(dueDate));
-            newPdf.add(new Paragraph(spasi));
-            newPdf.add(new Paragraph(caraPenanggulangan));
+            PdfContentByte canvas = writer.getDirectContent();
+            Rectangle rect = new Rectangle(0,354,276,396);
+            Rectangle rect2 = new Rectangle(0,70, 276, 100);
+            rect.setBorder(Rectangle.BOX);
+            rect2.setBorder(Rectangle.BOX);
+            rect.setBorderWidth(1);
+            rect.setBackgroundColor(BaseColor.RED);
+            rect2.setBackgroundColor(BaseColor.RED);
+            rect.setBorderColor(BaseColor.RED);
+            canvas.rectangle(rect);
+            canvas.rectangle(rect2);
+
+            ColumnText ct = new ColumnText(canvas);
+            ColumnText ct2 = new ColumnText(canvas);
+            ct.setSimpleColumn(rect);
+            ct2.setSimpleColumn(rect2);
+            ct.setAlignment(Element.ALIGN_CENTER);
+            ct2.setAlignment(Element.ALIGN_CENTER);
+            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
+            Font isiFont = new Font(Font.FontFamily.TIMES_ROMAN, 10);
+            catFont.setColor(BaseColor.WHITE);
+            Paragraph otherParagraph = new Paragraph("RED TAG \n Abnormality Tag", catFont);
+            otherParagraph.setAlignment(Element.ALIGN_CENTER);
+            Paragraph otherParagraph1 = new Paragraph("Penanggulangan", catFont);
+            otherParagraph1.setAlignment(Element.ALIGN_CENTER);
+            ct.addElement(otherParagraph);
+            ct2.addElement(otherParagraph1);
+            ct.go();
+            ct2.go();
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + nomorKontrol, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + bagianMesin, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + dipasangOleh, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + tglPasang, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + deskripsi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + nomorworkrequest, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + picfollowup, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + dueDate, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + caraPenanggulangan, isiFont));
 
 
             newPdf.close();
