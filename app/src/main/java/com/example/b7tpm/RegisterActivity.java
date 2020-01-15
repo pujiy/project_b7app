@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void userSignUp() {
 
-
+        Toast.makeText(RegisterActivity.this, "Loading...", Toast.LENGTH_LONG).show();
 
         //getting the user values
         checkBoxRegister.isChecked();
