@@ -44,6 +44,8 @@ public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapte
         final int formid = whiteForm.getForm_id();
         final String nomorkontrol = whiteForm.getNomor_kontrol();
         final String bagianmesin = whiteForm.getBagian_mesin();
+        final String namamesin = whiteForm.getNama_mesin();
+        final String nomormesin = whiteForm.getNomor_mesin();
         final String dipasangoleh = whiteForm.getDipasang_oleh();
         final String tglpasang = whiteForm.getTgl_pasang();
         final String deskripsi = whiteForm.getDeskripsi();
@@ -58,6 +60,8 @@ public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapte
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(DetailRCAWhiteFormActivity.EXTRA_DESKRIPSI, deskripsi);

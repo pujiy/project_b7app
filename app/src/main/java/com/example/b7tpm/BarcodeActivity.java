@@ -73,7 +73,7 @@ public class BarcodeActivity extends AppCompatActivity implements View.OnClickLi
 
                 APIService service = retrofit.create(APIService.class);
 
-                Call<DataMesin> call = service.getDataMesin();
+                Call<DataMesin> call = service.getDataMesin(nomorqr);
 
                 call.enqueue(new Callback<DataMesin>() {
                     @Override

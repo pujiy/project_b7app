@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,6 +45,8 @@ import com.squareup.picasso.Picasso;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -58,6 +61,8 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
     public static final String EXTRA_FORMID = "formid";
     public static final String EXTRA_NOMORKONTROL = "nomor_kontrol";
     public static final String EXTRA_BAGIANMESIN = "bagianmesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
     public static final String EXTRA_DIPASANGOLEH = "dipasangoleh";
     public static final String EXTRA_TGLPASANG = "tglpasang";
     public static final String EXTRA_DESKRIPSI = "deskripsi";
@@ -65,8 +70,9 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
     public static final String EXTRA_CARAPENANGGULANGAN = "cara penanggulangan";
     public static final String EXTRA_PHOTO = "photo";
     private TextView textViewDetail;
-    private TextView textViewNomorKontrol, textViewBagianMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewDueDate, textViewCaraPenanggulangan;
+    private TextView textViewNomorKontrol, textViewBagianMesin, textViewNamaMesin, textViewNomorMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
+    private String imgPhoto;
     private Button buttonEdit, buttonPrint, buttonDelete;
     private static final int STORAGE_CODE = 1000;
 
@@ -76,9 +82,13 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_white_form);
 
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         textViewDetail = findViewById(R.id.tv_detail);
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
+        textViewNamaMesin = findViewById(R.id.tv_namamesin);
+        textViewNomorMesin = findViewById(R.id.tv_nomormesin);
         textViewDipasangOleh = findViewById(R.id.tv_dipasangoleh);
         textViewTglPasang = findViewById(R.id.tv_tglpasang);
         textViewDeskripsi = findViewById(R.id.tv_deskripsi);
@@ -93,15 +103,20 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
         final String nomorkontrol = getIntent().getStringExtra(EXTRA_NOMORKONTROL);
         final String bagianmesin = getIntent().getStringExtra(EXTRA_BAGIANMESIN);
+        final String namamesin = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesin = getIntent().getStringExtra(EXTRA_NOMORMESIN);
         final String dipasangoleh = getIntent().getStringExtra(EXTRA_DIPASANGOLEH);
         final String tglpasang = getIntent().getStringExtra(EXTRA_TGLPASANG);
         final String deskripsi = getIntent().getStringExtra(EXTRA_DESKRIPSI);
         final String duedate = getIntent().getStringExtra(EXTRA_DUEDATE);
         final String carapenanggulangan = getIntent().getStringExtra(EXTRA_CARAPENANGGULANGAN);
         final String photo = getIntent().getStringExtra(EXTRA_PHOTO);
+        imgPhoto = photo;
 
         textViewNomorKontrol.setText(nomorkontrol);
         textViewBagianMesin.setText(bagianmesin);
+        textViewNamaMesin.setText(namamesin);
+        textViewNomorMesin.setText(nomormesin);
         textViewDipasangOleh.setText(dipasangoleh);
         textViewTglPasang.setText(tglpasang);
         textViewDeskripsi.setText(deskripsi);
@@ -125,6 +140,8 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(EditAdministrasiWhiteFormActivity.EXTRA_DESKRIPSI, deskripsi);
@@ -148,7 +165,13 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
                     }
                     else {
 
-                        printPdf();
+                        try {
+                            printPdf() ;
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         String status = "Open";
                         //building retrofit object
@@ -187,7 +210,13 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
                 else {
 
-                    printPdf();
+                    try {
+                        printPdf();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     String status = "Open";
                     //building retrofit object
@@ -260,7 +289,7 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
     }
 
-    private void printPdf() {
+    private void printPdf() throws DocumentException, MalformedURLException, IOException {
 
         Document newPdf = new Document();
 
@@ -269,11 +298,10 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
         String fileNamePdf = "WHITEFORM_"+ nomorkontrol + "_" + fileTime;
         String filePath = Environment.getExternalStorageDirectory() + "/" + fileNamePdf + ".pdf";
 
-
         try {
             PdfWriter writer = PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
 
-            Rectangle one = new Rectangle(280,396);
+            Rectangle one = new Rectangle(280,496);
             newPdf.setPageSize(one);
             newPdf.setMargins(2, 2, 2, 2);
             newPdf.open();
@@ -283,12 +311,17 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
             String detail = textViewDetail.getText().toString().trim();
             String nomorKontrol = "Nomor Kontrol : " + textViewNomorKontrol.getText().toString().trim();
             String bagianMesin = "Bagian Mesin : " + textViewBagianMesin.getText().toString().trim();
+            String namaMesin = "Nama Mesin : " + textViewNamaMesin.getText().toString().trim();
+            String nomorMesin = "Nomor Mesin : " + textViewNomorMesin.getText().toString().trim();
             String dipasangOleh = "Dipasang oleh : " + textViewDipasangOleh.getText().toString().trim();
             String tglPasang = "Tanggal Pemasangan : " + textViewTglPasang.getText().toString().trim();
             String deskripsi = "Deskripsi : " + textViewDeskripsi.getText().toString().trim();
             String dueDate = "Due Date : " + textViewDueDate.getText().toString().trim();
             String caraPenanggulangan = textViewCaraPenanggulangan.getText().toString().trim();
             String spasi = " \n";
+            String url = imgPhoto;
+            Image image = Image.getInstance(url);
+
 
 
             PdfContentByte canvas = writer.getDirectContent();
@@ -323,6 +356,7 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
             ct.go();
             ct2.go();
 
+
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
@@ -330,11 +364,18 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
             newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(bagianMesin, isiFont));
             newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(namaMesin, isiFont));
+            newPdf.add(new Paragraph(spasi));
+            newPdf.add(new Paragraph(nomorMesin, isiFont));
+            newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(dipasangOleh, isiFont));
             newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(tglPasang, isiFont));
             newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(deskripsi, isiFont));
+            newPdf.add(new Paragraph(spasi));
+            image.scaleToFit((float)100.0, (float)70.0);
+            newPdf.add(image);
             newPdf.add(new Paragraph(spasi));
             newPdf.add(new Paragraph(dueDate, isiFont));
             newPdf.add(new Paragraph(spasi));
@@ -364,7 +405,13 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
             case STORAGE_CODE : {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                   printPdf();
+                    try {
+                        printPdf();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     Toast.makeText(this, "Akses Ditolak...!", Toast.LENGTH_SHORT).show();

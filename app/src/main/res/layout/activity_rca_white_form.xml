@@ -22,11 +22,13 @@
             android:textSize="20sp"/>
 
 
+
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_rcawhiteform"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:listitem="@layout/list_rca_white_form"/>
 </LinearLayout>

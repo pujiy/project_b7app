@@ -47,6 +47,8 @@ public class AdministrasiWhiteFormAdapter extends RecyclerView.Adapter<Administr
         final int formid = whiteForm.getForm_id();
         final String nomorkontrol = whiteForm.getNomor_kontrol();
         final String bagianmesin = whiteForm.getBagian_mesin();
+        final String namamesin = whiteForm.getNama_mesin();
+        final String nomormesin = whiteForm.getNomor_mesin();
         final String dipasangoleh = whiteForm.getDipasang_oleh();
         final String tglpasang = whiteForm.getTgl_pasang();
         final String deskripsi = whiteForm.getDeskripsi();
@@ -60,6 +62,8 @@ public class AdministrasiWhiteFormAdapter extends RecyclerView.Adapter<Administr
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(DetailWhiteFormActivity.EXTRA_DESKRIPSI, deskripsi);

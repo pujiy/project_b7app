@@ -4,6 +4,7 @@ import com.example.b7tpm.Model.AdministrasiRedForm;
 import com.example.b7tpm.Model.AdministrasiWhiteForm;
 import com.example.b7tpm.Model.DataMesin;
 import com.example.b7tpm.Model.DeleteRedFormResponse;
+import com.example.b7tpm.Model.DeleteUserResponse;
 import com.example.b7tpm.Model.DeleteWhiteFormResponse;
 import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
@@ -54,6 +55,8 @@ public interface APIService {
     Call<NewWhiteFormResponse> sendNewWhiteForm (
             @Field("nomor_kontrol") String nomor_kontrol,
             @Field("bagian_mesin") String bagian_mesin,
+            @Field("nama_mesin") String nama_mesin,
+            @Field("nomor_mesin") String nomor_mesin,
             @Field("dipasang_oleh") String dipasang_oleh,
             @Field("tgl_pasang") String tgl_pasang,
             @Field("deskripsi") String deskripsi,
@@ -84,6 +87,8 @@ public interface APIService {
             @Path("formid") int formid,
             @Field("nomor_kontrol") String nomor_kontrol,
             @Field("bagian_mesin") String bagian_mesin,
+            @Field("nama_mesin") String nama_mesin,
+            @Field("nomor_mesin") String nomor_mesin,
             @Field("dipasang_oleh") String dipasang_oleh,
             @Field("tgl_pasang") String tgl_pasang,
             @Field("deskripsi") String deskripsi,
@@ -143,6 +148,13 @@ public interface APIService {
             @Field("formid") int formid
     );
 
+    @FormUrlEncoded
+    @POST("deleteuser")
+    Call<DeleteUserResponse> deleteUser (
+            @Field("email") String email
+    );
+
+
     @GET("whiteform/close")
     Call<WhiteFormClose> getWhiteFormClose();
 
@@ -169,8 +181,8 @@ public interface APIService {
 
 
 
-    @GET("datamesin/AB1C1234")
-    Call<DataMesin> getDataMesin ();
+    @GET("datamesin/{nomormesin}")
+    Call<DataMesin> getDataMesin (@Path("nomormesin") String nomormesin);
     //getting messages
    /* @GET("messages/{id}")
     Call<Messages> getMessages(@Path("id") int id); */

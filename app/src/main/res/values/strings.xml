@@ -3,4 +3,16 @@
     <string name="textview_case_signup">Belum punya akun? <u> Daftar Disini</u></string>
     <string name="textview_case_login">Sudah punya akun? <u> Login</u></string>
     <string name="checkbox_signup">Dengan ini Saya menyatakan bahwa data yang Saya masukkan diatas adalah benar</string>
+    <string-array name="namamesin">
+        <item>Mesin Guerin 1</item>
+        <item>Mesin Guerin 2</item>
+        <item>Mesin Compounding 1</item>
+        <item>Mesin Compounding 2</item>
+        <item>Mesin Filling A</item>
+        <item>Mesin Filling B</item>
+        <item>Mesin Filling C</item>
+        <item>Mesin Kemas A</item>
+        <item>Mesin Kemas B</item>
+        <item>Mesin Kemas C</item>
+    </string-array>
 </resources>
