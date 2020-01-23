@@ -5,7 +5,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.b7tpm.Adapter.AdministrasiWhiteFormAdapter;
 import com.example.b7tpm.Api.APIService;
@@ -34,6 +36,10 @@ public class AdministrasiWhiteFormActivity extends AppCompatActivity {
         recyclerViewAdministrasiWhiteForms.setHasFixedSize(true);
         recyclerViewAdministrasiWhiteForms.setLayoutManager(new LinearLayoutManager(this));
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(APIUrl.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -46,12 +52,15 @@ public class AdministrasiWhiteFormActivity extends AppCompatActivity {
         call.enqueue(new Callback<AdministrasiWhiteForm>() {
             @Override
             public void onResponse(Call<AdministrasiWhiteForm> call, Response<AdministrasiWhiteForm> response) {
+                progressDialog.dismiss();
                 adapter = new AdministrasiWhiteFormAdapter(response.body().getAllwhiteform(), getApplicationContext());
                 recyclerViewAdministrasiWhiteForms.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<AdministrasiWhiteForm> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });

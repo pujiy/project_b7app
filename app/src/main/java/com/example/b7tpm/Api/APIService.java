@@ -70,6 +70,8 @@ public interface APIService {
     Call<NewRedFormResponse> sendNewRedForm (
             @Field("nomor_kontrol") String nomor_kontrol,
             @Field("bagian_mesin") String bagian_mesin,
+            @Field("nama_mesin") String nama_mesin,
+            @Field("nomor_mesin") String nomor_mesin,
             @Field("dipasang_oleh") String dipasang_oleh,
             @Field("tgl_pasang") String tgl_pasang,
             @Field("deskripsi") String deskripsi,
@@ -103,6 +105,8 @@ public interface APIService {
             @Path("formid") int formid,
             @Field("nomor_kontrol") String nomor_kontrol,
             @Field("bagian_mesin") String bagian_mesin,
+            @Field("nama_mesin") String nama_mesin,
+            @Field("nomor_mesin") String nomor_mesin,
             @Field("dipasang_oleh") String dipasang_oleh,
             @Field("tgl_pasang") String tgl_pasang,
             @Field("deskripsi") String deskripsi,

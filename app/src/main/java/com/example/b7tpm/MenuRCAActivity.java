@@ -9,6 +9,8 @@ import android.view.View;
 
 public class MenuRCAActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String EXTRA_FOLDER = "folder";
+
     private CardView cardViewWhiteForm, cardViewRedForm;
 
     @Override
@@ -18,6 +20,8 @@ public class MenuRCAActivity extends AppCompatActivity implements View.OnClickLi
 
         cardViewWhiteForm = findViewById(R.id.cardview_rca_white_form);
         cardViewRedForm = findViewById(R.id.cardview_rca_red_form);
+
+        final String folder = getIntent().getStringExtra(EXTRA_FOLDER);
 
         cardViewWhiteForm.setOnClickListener(this);
         cardViewRedForm.setOnClickListener(this);
@@ -35,13 +39,13 @@ public class MenuRCAActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void rcaRedForm() {
-        Intent intent = new Intent(MenuRCAActivity.this, RCARedFormActivity.class);
+        Intent intent = new Intent(MenuRCAActivity.this, MenuRCARedFormsCategoryActivity.class);
         startActivity(intent);
 
     }
 
     private void rcaWhiteForm() {
-        Intent intent = new Intent(MenuRCAActivity.this, RCAWhiteFormActivity.class);
+        Intent intent = new Intent(MenuRCAActivity.this, MenuRCAWhiteFormsCategoryActivity.class);
         startActivity(intent);
     }
 }

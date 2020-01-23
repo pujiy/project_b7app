@@ -57,6 +57,35 @@
             android:hint="Bagian Mesin"
             app:met_primaryColor="@android:color/holo_red_light"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Nama Mesin"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <Spinner
+            android:id="@+id/spnamamesin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtnomormesin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="16sp"
+            app:met_floatingLabel="highlight"
+            android:hint="Nomor Mesin"
+            app:met_primaryColor="@android:color/holo_green_dark"/>
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtdipasangoleh"
             android:layout_width="match_parent"

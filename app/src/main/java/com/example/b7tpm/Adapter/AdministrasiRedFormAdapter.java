@@ -42,6 +42,8 @@ public class AdministrasiRedFormAdapter extends RecyclerView.Adapter<Administras
         final int formid = redForm.getForm_id();
         final String nomorkontrol = redForm.getNomor_kontrol();
         final String bagianmesin = redForm.getBagian_mesin();
+        final String namamesin = redForm.getNama_mesin();
+        final String nomormesin = redForm.getNomor_mesin();
         final String dipasangoleh = redForm.getDipasang_oleh();
         final String tglpasang = redForm.getTgl_pasang();
         final String deskripsi = redForm.getDeskripsi();
@@ -57,6 +59,8 @@ public class AdministrasiRedFormAdapter extends RecyclerView.Adapter<Administras
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(DetailRedFormActivity.EXTRA_DESKRIPSI, deskripsi);

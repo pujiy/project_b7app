@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,15 +17,18 @@ import com.example.b7tpm.DetailRCAWhiteFormActivity;
 import com.example.b7tpm.Model.WhiteForm;
 import com.example.b7tpm.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapter.ViewHolder> {
+public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapter.ViewHolder> implements Filterable {
 
     private List<WhiteForm> whiteFormsClose;
+    private List<WhiteForm> whiteFormsCloseFilter;
     private Context ctx;
 
     public RCAWhiteFormAdapter(List<WhiteForm> whiteFormsClose, Context ctx) {
         this.whiteFormsClose = whiteFormsClose;
+        whiteFormsCloseFilter = new ArrayList<>(whiteFormsClose);
         this.ctx = ctx;
     }
 
@@ -40,6 +45,7 @@ public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapte
             WhiteForm whiteForm = whiteFormsClose.get(position);
             holder.textViewNomorKontrol.setText(whiteForm.getNomor_kontrol());
             holder.textViewRCAWhiteFormStatus.setText(whiteForm.getStatus());
+            holder.textViewNamaMesin.setText(whiteForm.getNama_mesin());
 
         final int formid = whiteForm.getForm_id();
         final String nomorkontrol = whiteForm.getNomor_kontrol();
@@ -82,9 +88,48 @@ public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapte
         return whiteFormsClose.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return rcaWhiteFormsFilter;
+    }
+
+    private Filter rcaWhiteFormsFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<WhiteForm> filteredWhiteFormClose = new ArrayList<>();
+
+            if(constraint == null || constraint.length() == 0) {
+                filteredWhiteFormClose.addAll(whiteFormsCloseFilter);
+            }
+            else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for(WhiteForm item : whiteFormsCloseFilter) {
+                    if(item.getNama_mesin().toLowerCase().contains(filterPattern)) {
+                        filteredWhiteFormClose.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredWhiteFormClose;
+
+            return  results;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            whiteFormsClose.clear();
+            whiteFormsClose.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewNomorKontrol;
+        public TextView textViewNamaMesin;
         public TextView textViewRCAWhiteFormStatus;
         public CardView cardViewList;
 
@@ -92,6 +137,7 @@ public class RCAWhiteFormAdapter extends RecyclerView.Adapter<RCAWhiteFormAdapte
             super(itemView);
 
             textViewNomorKontrol = (TextView)itemView.findViewById(R.id.tv_nomorkontrol);
+            textViewNamaMesin = (TextView) itemView.findViewById(R.id.tv_namamesin);
             textViewRCAWhiteFormStatus = (TextView)itemView.findViewById(R.id.tv_status);
             cardViewList = itemView.findViewById(R.id.cv_list);
         }

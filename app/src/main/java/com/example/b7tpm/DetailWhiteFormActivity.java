@@ -291,6 +291,8 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
     private void printPdf() throws DocumentException, MalformedURLException, IOException {
 
+        Toast.makeText(this, "Download File...", Toast.LENGTH_LONG).show();
+
         Document newPdf = new Document();
 
         String nomorkontrol = textViewNomorKontrol.getText().toString().trim();
@@ -325,8 +327,8 @@ public class DetailWhiteFormActivity extends AppCompatActivity {
 
 
             PdfContentByte canvas = writer.getDirectContent();
-            Rectangle rect = new Rectangle(0,354,276,396);
-            Rectangle rect2 = new Rectangle(0,100, 276, 130);
+            Rectangle rect = new Rectangle(0,354,276,496);
+            Rectangle rect2 = new Rectangle(0,100, 276, 230);
             rect.setBorder(Rectangle.BOX);
             rect2.setBorder(Rectangle.BOX);
             rect.setBorderWidth(1);

@@ -21,7 +21,8 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/ic_rca"/>
 
         <TextView
@@ -48,6 +49,22 @@
             android:layout_marginLeft="80dp"
             android:layout_marginTop="50dp"
             tools:text="1234ABCD"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nama Mesin"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="80dp"/>
+
+        <TextView
+            android:id="@+id/tv_namamesin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="100dp"
+            tools:text="Mesin Guerin 1"
             android:textSize="20sp"/>
 
     </androidx.cardview.widget.CardView>

@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // set pesan dari dialog
         alertDialogBuilder
                 .setMessage("Silahkan hubungin admin untuk merubah password atau klik registrasi untuk mendaftar ulang")
-                .setIcon(R.mipmap.ic_launcher)
+                .setIcon(R.mipmap.ic_b7tpm)
                 .setCancelable(false)
                 .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                     @Override

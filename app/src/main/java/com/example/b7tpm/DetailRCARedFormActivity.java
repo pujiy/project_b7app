@@ -14,6 +14,8 @@ public class DetailRCARedFormActivity extends AppCompatActivity {
     public static final String EXTRA_FORMID = "formid";
     public static final String EXTRA_NOMORKONTROL = "nomor_kontrol";
     public static final String EXTRA_BAGIANMESIN = "bagianmesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
     public static final String EXTRA_DIPASANGOLEH = "dipasangoleh";
     public static final String EXTRA_TGLPASANG = "tglpasang";
     public static final String EXTRA_DESKRIPSI = "deskripsi";
@@ -25,7 +27,7 @@ public class DetailRCARedFormActivity extends AppCompatActivity {
     public static final String EXTRA_STATUS = "status";
     public String[] listStatus ={"Open", "On Process", "Close"};
 
-    private TextView textViewStatus, textViewNomorKontrol, textViewBagianMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewPicFollowUp, textViewDueDate, textViewCaraPenanggulangan;
+    private TextView textViewStatus, textViewNomorKontrol, textViewBagianMesin, textViewNamaMesin, textViewNomorMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewPicFollowUp, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
     private Button buttonEdit;
 
@@ -36,6 +38,8 @@ public class DetailRCARedFormActivity extends AppCompatActivity {
 
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
+        textViewNamaMesin = findViewById(R.id.tv_namamesin);
+        textViewNomorMesin = findViewById(R.id.tv_nomormesin);
         textViewDipasangOleh = findViewById(R.id.tv_dipasangoleh);
         textViewTglPasang = findViewById(R.id.tv_tglpasang);
         textViewDeskripsi = findViewById(R.id.tv_deskripsi);
@@ -52,6 +56,8 @@ public class DetailRCARedFormActivity extends AppCompatActivity {
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
         final String nomorkontrol = getIntent().getStringExtra(EXTRA_NOMORKONTROL);
         final String bagianmesin = getIntent().getStringExtra(EXTRA_BAGIANMESIN);
+        final String namamesin = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesin = getIntent().getStringExtra(EXTRA_NOMORMESIN);
         final String dipasangoleh = getIntent().getStringExtra(EXTRA_DIPASANGOLEH);
         final String tglpasang = getIntent().getStringExtra(EXTRA_TGLPASANG);
         final String deskripsi = getIntent().getStringExtra(EXTRA_DESKRIPSI);
@@ -65,6 +71,8 @@ public class DetailRCARedFormActivity extends AppCompatActivity {
         textViewStatus.setText(status);
         textViewNomorKontrol.setText(nomorkontrol);
         textViewBagianMesin.setText(bagianmesin);
+        textViewNamaMesin.setText(namamesin);
+        textViewNomorMesin.setText(nomormesin);
         textViewDipasangOleh.setText(dipasangoleh);
         textViewTglPasang.setText(tglpasang);
         textViewDeskripsi.setText(deskripsi);

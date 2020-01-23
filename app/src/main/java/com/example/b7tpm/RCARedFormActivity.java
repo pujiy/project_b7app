@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.b7tpm.Adapter.RCARedFormAdapter;
 import com.example.b7tpm.Adapter.RCAWhiteFormAdapter;
@@ -21,8 +23,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RCARedFormActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String EXTRA_FOLDER = "folder";
+
     private RecyclerView recyclerViewRedForm;
-    private RecyclerView.Adapter adapter;
+    private RCARedFormAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,12 @@ public class RCARedFormActivity extends AppCompatActivity implements View.OnClic
         recyclerViewRedForm = findViewById(R.id.rv_rcaredform);
         recyclerViewRedForm.setHasFixedSize(true);
         recyclerViewRedForm.setLayoutManager(new LinearLayoutManager(this));
+
+        final String folder = getIntent().getStringExtra(EXTRA_FOLDER);
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(APIUrl.BASE_URL)
@@ -47,13 +57,24 @@ public class RCARedFormActivity extends AppCompatActivity implements View.OnClic
             public void onResponse(Call<RedFormClose> call, Response<RedFormClose> response) {
                 adapter = new RCARedFormAdapter(response.body().getRedformclose(), getApplicationContext());
                 recyclerViewRedForm.setAdapter(adapter);
+                adapter.getFilter().filter(folder);
+
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<RedFormClose> call, Throwable t) {
 
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        setUpRecyclerView();
+
+    }
+
+    private void setUpRecyclerView() {
 
     }
 

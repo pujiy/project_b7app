@@ -13,13 +13,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +55,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
     public static final String EXTRA_FORMID = "formid";
     public static final String EXTRA_NOMORKONTROL = "nomorkontrol";
     public static final String EXTRA_BAGIANMESIN = "bagianmesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
     public static final String EXTRA_DIPASANGOLEH = "dipasangoleh";
     public static final String EXTRA_TGLPASANG = "tglpasang";
     public static final String EXTRA_DESKRIPSI = "deskripsi";
@@ -68,7 +74,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
     private ProgressBar progressBar;
     private String photoUrl;
     private TextView textViewTanggalPasang, textViewDueDate, textViewImage;
-    private EditText editTextNomorKontrol, editTextBagianMesin, editTextdipasangoleh, editTextdeskripsi, editTextNomorWorkRequest, editTextPicFollowUp, editTextCaraPenanggulangan;
+    private EditText editTextNomorKontrol, editTextBagianMesin, editTextNomorMesin, editTextdipasangoleh, editTextdeskripsi, editTextNomorWorkRequest, editTextPicFollowUp, editTextCaraPenanggulangan;
+    private Spinner spnamamesin;
 
     private Uri imageUri;
 
@@ -97,10 +104,12 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
         editTextNomorWorkRequest = findViewById(R.id.edtnomorworkrequest);
         editTextPicFollowUp = findViewById(R.id.edtpicfollowup);
         editTextBagianMesin = findViewById(R.id.edtbagianmesin);
+        editTextNomorMesin = findViewById(R.id.edtnomormesin);
         editTextdipasangoleh = findViewById(R.id.edtdipasangoleh);
 
         editTextdeskripsi = findViewById(R.id.edtdeskripsi);
         editTextCaraPenanggulangan = findViewById(R.id.edtcarapenanggulangan);
+        spnamamesin = findViewById(R.id.spnamamesin);
         String photo = photoUrl;
         storageReference = FirebaseStorage.getInstance().getReference("uploadphotoswhiteform");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploadphotoswhiteform");
@@ -108,6 +117,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
         final String nomorkontrol = getIntent().getStringExtra(EXTRA_NOMORKONTROL);
         final String bagianmesin = getIntent().getStringExtra(EXTRA_BAGIANMESIN);
+        final String namamesin = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesin = getIntent().getStringExtra(EXTRA_NOMORMESIN);
         final String dipasangoleh = getIntent().getStringExtra(EXTRA_DIPASANGOLEH);
         final String tglpasang = getIntent().getStringExtra(EXTRA_TGLPASANG);
         final String deskripsi = getIntent().getStringExtra(EXTRA_DESKRIPSI);
@@ -118,6 +129,7 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
 
         editTextNomorKontrol.setText(nomorkontrol);
         editTextBagianMesin.setText(bagianmesin);
+        editTextNomorMesin.setText(nomormesin);
         editTextdipasangoleh.setText(dipasangoleh);
         textViewTanggalPasang.setText(tglpasang);
         editTextdeskripsi.setText(deskripsi);
@@ -145,6 +157,24 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
             }
         });
 
+        //spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.namamesin, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnamamesin.setAdapter(adapter);
+
+        // spinner on click
+
+        spnamamesin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("Spinner Selected Item",""+spnamamesin.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Button kirim data baru
         btnsubmitredform.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +195,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
                 dueDatePicker.show(getSupportFragmentManager(), "date picker");
             }
         });
+
+
     }
 
     private void uploadFile() {
@@ -177,6 +209,7 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
 
         String nomor_kontrol = editTextNomorKontrol.getText().toString().trim();
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
+        String nomor_mesin = editTextNomorMesin.getText().toString().trim();
         String dipasang_oleh = editTextdipasangoleh.getText().toString().trim();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextdeskripsi.getText().toString().trim();
@@ -195,6 +228,13 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
         if (TextUtils.isEmpty(bagian_mesin)) {
             editTextBagianMesin.setError("Masukkan Bagian Mesin");
             editTextBagianMesin.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(nomor_mesin)) {
+            editTextNomorMesin.setError("Masukkan Nomor Mesin");
+            editTextNomorMesin.requestFocus();
             progressDialog.dismiss();
             return;
         }
@@ -315,6 +355,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
         int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
         String nomor_kontrol = editTextNomorKontrol.getText().toString().trim();
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
+        String nama_mesin = spnamamesin.getSelectedItem().toString();
+        String nomor_mesin = editTextNomorMesin.getText().toString().trim();
         String dipasang_oleh = editTextdipasangoleh.getText().toString().trim();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextdeskripsi.getText().toString().trim();
@@ -336,6 +378,13 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
         if (TextUtils.isEmpty(bagian_mesin)) {
             editTextBagianMesin.setError("Masukkan Bagian Mesin");
             editTextBagianMesin.requestFocus();
+            progressDialog.dismiss();
+            return;
+        }
+
+        if (TextUtils.isEmpty(nomor_mesin)) {
+            editTextNomorMesin.setError("Masukkan Nomor Mesin");
+            editTextNomorMesin.requestFocus();
             progressDialog.dismiss();
             return;
         }
@@ -414,6 +463,8 @@ public class EditAdministrasiRedFormActivity extends AppCompatActivity implement
                 formid,
                 nomor_kontrol,
                 bagian_mesin,
+                nama_mesin,
+                nomor_mesin,
                 dipasang_oleh,
                 tgl_pasang,
                 deskripsi,

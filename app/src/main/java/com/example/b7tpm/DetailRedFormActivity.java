@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Helper.SharedPrefManager;
 import com.example.b7tpm.Model.DeleteRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusRedFormResponse;
 import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
+import com.example.b7tpm.Model.User;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -49,6 +51,8 @@ public class DetailRedFormActivity extends AppCompatActivity {
     public static final String EXTRA_FORMID = "formid";
     public static final String EXTRA_NOMORKONTROL = "nomor_kontrol";
     public static final String EXTRA_BAGIANMESIN = "bagianmesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
     public static final String EXTRA_DIPASANGOLEH = "dipasangoleh";
     public static final String EXTRA_TGLPASANG = "tglpasang";
     public static final String EXTRA_DESKRIPSI = "deskripsi";
@@ -57,7 +61,7 @@ public class DetailRedFormActivity extends AppCompatActivity {
     public static final String EXTRA_DUEDATE = "duedate";
     public static final String EXTRA_CARAPENANGGULANGAN = "cara penanggulangan";
     public static final String EXTRA_PHOTO = "photo";
-    private TextView textViewDetail, textViewNomorKontrol, textViewBagianMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewpicfollowup, textViewDueDate, textViewCaraPenanggulangan;
+    private TextView textViewDetail, textViewNomorKontrol, textViewBagianMesin, textViewNamaMesin, textViewNomorMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewpicfollowup, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
     private Button buttonEdit, buttonPrint, buttonDelete;
     private static final int STORAGE_CODE = 1000;
@@ -69,6 +73,8 @@ public class DetailRedFormActivity extends AppCompatActivity {
 
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
+        textViewNamaMesin = findViewById(R.id.tv_namamesin);
+        textViewNomorMesin = findViewById(R.id.tv_nomormesin);
         textViewDipasangOleh = findViewById(R.id.tv_dipasangoleh);
         textViewTglPasang = findViewById(R.id.tv_tglpasang);
         textViewDeskripsi = findViewById(R.id.tv_deskripsi);
@@ -85,6 +91,8 @@ public class DetailRedFormActivity extends AppCompatActivity {
         final int formid = getIntent().getIntExtra(EXTRA_FORMID, 0);
         final String nomorkontrol = getIntent().getStringExtra(EXTRA_NOMORKONTROL);
         final String bagianmesin = getIntent().getStringExtra(EXTRA_BAGIANMESIN);
+        final String namamesin = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesin = getIntent().getStringExtra(EXTRA_NOMORMESIN);
         final String dipasangoleh = getIntent().getStringExtra(EXTRA_DIPASANGOLEH);
         final String tglpasang = getIntent().getStringExtra(EXTRA_TGLPASANG);
         final String deskripsi = getIntent().getStringExtra(EXTRA_DESKRIPSI);
@@ -96,6 +104,8 @@ public class DetailRedFormActivity extends AppCompatActivity {
 
         textViewNomorKontrol.setText(nomorkontrol);
         textViewBagianMesin.setText(bagianmesin);
+        textViewNamaMesin.setText(namamesin);
+        textViewNomorMesin.setText(nomormesin);
         textViewDipasangOleh.setText(dipasangoleh);
         textViewTglPasang.setText(tglpasang);
         textViewDeskripsi.setText(deskripsi);
@@ -105,6 +115,13 @@ public class DetailRedFormActivity extends AppCompatActivity {
         textViewCaraPenanggulangan.setText(carapenanggulangan);
         Picasso.get().load(photo).into(imageViewPhoto);
 
+        //getting the current user
+        User user = SharedPrefManager.getInstance(this).getUser();
+
+        if (user.getIsuser() == 0) {
+            buttonEdit.setEnabled(true);
+        }
+
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +130,8 @@ public class DetailRedFormActivity extends AppCompatActivity {
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(EditAdministrasiRedFormActivity.EXTRA_DESKRIPSI, deskripsi);
@@ -257,6 +276,8 @@ canvas.fillStroke();
 
      */
     private void printPdf() {
+
+        Toast.makeText(this, "Download File...", Toast.LENGTH_LONG).show();
 
         Document newPdf = new Document();
 

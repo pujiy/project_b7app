@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -35,6 +36,10 @@ public class AdministrasiRedFormActivity extends AppCompatActivity {
         recyclerViewAdministrasiRedForms.setHasFixedSize(true);
         recyclerViewAdministrasiRedForms.setLayoutManager(new LinearLayoutManager(this));
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(APIUrl.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -47,14 +52,15 @@ public class AdministrasiRedFormActivity extends AppCompatActivity {
         call.enqueue(new Callback<AdministrasiRedForm>() {
             @Override
             public void onResponse(Call<AdministrasiRedForm> call, Response<AdministrasiRedForm> response) {
+                progressDialog.dismiss();
                 adapter = new AdministrasiRedFormAdapter(response.body().getAllredform(), getApplicationContext());
                 recyclerViewAdministrasiRedForms.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<AdministrasiRedForm> call, Throwable t) {
-
-                Toast.makeText(AdministrasiRedFormActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

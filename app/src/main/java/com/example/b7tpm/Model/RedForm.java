@@ -5,6 +5,8 @@ public class RedForm {
     private int form_id;
     private String nomor_kontrol;
     private String bagian_mesin;
+    private String nama_mesin;
+    private String nomor_mesin;
     private String dipasang_oleh;
     private String tgl_pasang;
     private String deskripsi;
@@ -15,10 +17,12 @@ public class RedForm {
     private String cara_penanggulangan;
     private String status;
 
-    public RedForm(int form_id, String nomor_kontrol, String bagian_mesin, String dipasang_oleh, String tgl_pasang, String deskripsi, String photo, String nomor_work_request, String pic_follow_up, String due_date, String cara_penanggulangan, String status) {
+    public RedForm(int form_id, String nomor_kontrol, String bagian_mesin, String nama_mesin, String nomor_mesin, String dipasang_oleh, String tgl_pasang, String deskripsi, String photo, String nomor_work_request, String pic_follow_up, String due_date, String cara_penanggulangan, String status) {
         this.form_id = form_id;
         this.nomor_kontrol = nomor_kontrol;
         this.bagian_mesin = bagian_mesin;
+        this.nama_mesin = nama_mesin;
+        this.nomor_mesin = nomor_mesin;
         this.dipasang_oleh = dipasang_oleh;
         this.tgl_pasang = tgl_pasang;
         this.deskripsi = deskripsi;
@@ -40,6 +44,14 @@ public class RedForm {
 
     public String getBagian_mesin() {
         return bagian_mesin;
+    }
+
+    public String getNama_mesin() {
+        return nama_mesin;
+    }
+
+    public String getNomor_mesin() {
+        return nomor_mesin;
     }
 
     public String getDipasang_oleh() {
