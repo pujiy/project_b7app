@@ -10,6 +10,7 @@ import android.icu.util.LocaleData;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.ColumnText;
@@ -37,6 +39,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -63,6 +67,7 @@ public class DetailRedFormActivity extends AppCompatActivity {
     public static final String EXTRA_PHOTO = "photo";
     private TextView textViewDetail, textViewNomorKontrol, textViewBagianMesin, textViewNamaMesin, textViewNomorMesin, textViewDipasangOleh, textViewTglPasang, textViewDeskripsi, textViewNomorWorkRequest, textViewpicfollowup, textViewDueDate, textViewCaraPenanggulangan;
     private ImageView imageViewPhoto;
+    private String imgPhoto;
     private Button buttonEdit, buttonPrint, buttonDelete;
     private static final int STORAGE_CODE = 1000;
 
@@ -70,6 +75,9 @@ public class DetailRedFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_red_form);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         textViewNomorKontrol = findViewById(R.id.tv_nomorkontrol);
         textViewBagianMesin = findViewById(R.id.tv_bagianmesin);
@@ -101,6 +109,7 @@ public class DetailRedFormActivity extends AppCompatActivity {
         final String duedate = getIntent().getStringExtra(EXTRA_DUEDATE);
         final String carapenanggulangan = getIntent().getStringExtra(EXTRA_CARAPENANGGULANGAN);
         final String photo = getIntent().getStringExtra(EXTRA_PHOTO);
+        imgPhoto = photo;
 
         textViewNomorKontrol.setText(nomorkontrol);
         textViewBagianMesin.setText(bagianmesin);
@@ -158,7 +167,13 @@ public class DetailRedFormActivity extends AppCompatActivity {
                     }
                     else {
 
-                        printPdf();
+                        try {
+                            printPdf();
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         String status = "Open";
                         //building retrofit object
@@ -195,7 +210,13 @@ public class DetailRedFormActivity extends AppCompatActivity {
 
                 else {
 
-                    printPdf();
+                    try {
+                        printPdf();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     String status = "Open";
                     //building retrofit object
@@ -275,7 +296,7 @@ canvas.rectangle(rect.getLeft(), rect.getBottom() - 1.5f, rect.getWidth(), rect.
 canvas.fillStroke();
 
      */
-    private void printPdf() {
+    private void printPdf() throws DocumentException, MalformedURLException, IOException {
 
         Toast.makeText(this, "Download File...", Toast.LENGTH_LONG).show();
 
@@ -292,7 +313,7 @@ canvas.fillStroke();
 
             PdfWriter writer = PdfWriter.getInstance(newPdf, new FileOutputStream(filePath));
 
-            Rectangle one = new Rectangle(280,396);
+            Rectangle one = new Rectangle(280,515);
             newPdf.setPageSize(one);
             newPdf.setMargins(2, 2, 2, 2);
             newPdf.open();
@@ -302,6 +323,8 @@ canvas.fillStroke();
             String detail = textViewDetail.getText().toString().trim();
             String nomorKontrol = "Nomor Kontrol : " + textViewNomorKontrol.getText().toString().trim();
             String bagianMesin = "Bagian Mesin : " + textViewBagianMesin.getText().toString().trim();
+            String namaMesin = "Nama Mesin  : " + textViewNamaMesin.getText().toString().trim();
+            String nomorMesin = "Nomor Mesin  " + textViewNomorMesin.getText().toString().trim();
             String dipasangOleh = "Dipasang oleh : " + textViewDipasangOleh.getText().toString().trim();
             String tglPasang = "Tanggal Pemasangan : " + textViewTglPasang.getText().toString().trim();
             String deskripsi = "Deskripsi : " + textViewDeskripsi.getText().toString().trim();
@@ -310,10 +333,13 @@ canvas.fillStroke();
             String dueDate = "Due Date : " + textViewDueDate.getText().toString().trim();
             String caraPenanggulangan = textViewCaraPenanggulangan.getText().toString().trim();
             String spasi = " \n";
+            String url = imgPhoto;
+            Image image = Image.getInstance(url);
+
 
             PdfContentByte canvas = writer.getDirectContent();
-            Rectangle rect = new Rectangle(0,354,276,396);
-            Rectangle rect2 = new Rectangle(0,70, 276, 100);
+            Rectangle rect = new Rectangle(0,454,276,515);
+            Rectangle rect2 = new Rectangle(0,45, 276, 75);
             rect.setBorder(Rectangle.BOX);
             rect2.setBorder(Rectangle.BOX);
             rect.setBorderWidth(1);
@@ -348,12 +374,18 @@ canvas.fillStroke();
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph("  " + bagianMesin, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + namaMesin, isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
+            newPdf.add(new Paragraph("  " + nomorMesin,isiFont));
+            newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph("  " + dipasangOleh, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph("  " + tglPasang, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph("  " + deskripsi, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
+            image.scaleToFit((float)100.0, (float)75.0);
+            newPdf.add(image);
             newPdf.add(new Paragraph("  " + nomorworkrequest, isiFont));
             newPdf.add(new Paragraph(spasi, isiFont));
             newPdf.add(new Paragraph("  " + picfollowup, isiFont));
@@ -383,7 +415,13 @@ canvas.fillStroke();
             case STORAGE_CODE : {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    printPdf();
+                    try {
+                        printPdf();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     Toast.makeText(this, "Akses Ditolak...!", Toast.LENGTH_SHORT).show();

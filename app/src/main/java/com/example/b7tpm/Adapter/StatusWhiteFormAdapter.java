@@ -43,6 +43,8 @@ public class StatusWhiteFormAdapter extends RecyclerView.Adapter<StatusWhiteForm
         final int formid = whiteForm.getForm_id();
         final String nomorkontrol = whiteForm.getNomor_kontrol();
         final String bagianmesin = whiteForm.getBagian_mesin();
+        final String namamesin = whiteForm.getNama_mesin();
+        final String nomormesin = whiteForm.getNomor_mesin();
         final String dipasangoleh = whiteForm.getDipasang_oleh();
         final String tglpasang = whiteForm.getTgl_pasang();
         final String deskripsi = whiteForm.getDeskripsi();
@@ -57,6 +59,8 @@ public class StatusWhiteFormAdapter extends RecyclerView.Adapter<StatusWhiteForm
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(DetailStatusWhiteFormActivity.EXTRA_DESKRIPSI, deskripsi);

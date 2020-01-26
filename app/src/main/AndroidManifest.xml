@@ -32,7 +32,7 @@
         <activity android:name=".AdministrasiWhiteFormActivity" />
         <activity android:name=".AdministrasiFormActivity" />
         <activity android:name=".DetailRedFormActivity" />
-        <activity android:name=".DetailWhiteFormActivity" />
+        <activity android:name=".SplashScreenActivity" />
         <activity android:name=".RCARedFormActivity" />
         <activity android:name=".RCAWhiteFormActivity" />
         <activity android:name=".MenuRCAActivity" />
@@ -41,10 +41,10 @@
         <activity android:name=".NewWhiteFormActivity" />
         <activity android:name=".NewFormActivity" />
         <activity android:name=".InfoActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".DetailWhiteFormActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

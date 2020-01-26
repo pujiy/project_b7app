@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.b7tpm.DetailRedFormActivity;
 import com.example.b7tpm.DetailStatusRedFormActivity;
+import com.example.b7tpm.DetailStatusWhiteFormActivity;
 import com.example.b7tpm.Model.RedForm;
 import com.example.b7tpm.R;
 
@@ -44,6 +46,8 @@ public class StatusRedFormAdapter extends RecyclerView.Adapter<StatusRedFormAdap
         final int formid = redForm.getForm_id();
         final String nomorkontrol = redForm.getNomor_kontrol();
         final String bagianmesin = redForm.getBagian_mesin();
+        final String namamesin = redForm.getNama_mesin();
+        final String nomormesin = redForm.getNomor_mesin();
         final String dipasangoleh = redForm.getDipasang_oleh();
         final String tglpasang = redForm.getTgl_pasang();
         final String deskripsi = redForm.getDeskripsi();
@@ -61,6 +65,8 @@ public class StatusRedFormAdapter extends RecyclerView.Adapter<StatusRedFormAdap
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_FORMID, formid);
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_NOMORKONTROL, nomorkontrol);
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_BAGIANMESIN, bagianmesin);
+                moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_NAMAMESIN, namamesin);
+                moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_NOMORMESIN, nomormesin);
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_DIPASANGOLEH, dipasangoleh);
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_TGLPASANG, tglpasang);
                 moveWithDataIntent.putExtra(DetailStatusRedFormActivity.EXTRA_DESKRIPSI, deskripsi);
