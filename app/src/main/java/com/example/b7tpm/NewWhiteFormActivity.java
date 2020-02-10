@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -28,9 +29,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b7tpm.Adapter.AdministrasiWhiteFormAdapter;
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
+import com.example.b7tpm.Model.AdministrasiWhiteForm;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
+import com.example.b7tpm.Model.WhiteForm;
+import com.example.b7tpm.Model.WhiteFormLastId;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +45,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -56,16 +63,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewWhiteFormActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button mButtonChooseImage;
     private Button btnsubmitwhiteform;
+    private Button btnscanqr;
     private ImageView imageViewPhoto;
     private ProgressBar progressBar;
     private String photoUrl;
     private TextView textViewTanggalPasang, textViewDueDate, textViewImage;
-    private EditText editTextNomorKontrol, editTextBagianMesin, editTextNamaMesin, editTextNomorMesin, editTextdipasangoleh, editTextdeskripsi, editTextCaraPenanggulangan;
-    private Spinner spnamamesin;
+    private EditText editTextNomorKontrol, editTextBagianMesin, editTextNamaMesin, editTextNomorMesin, editTextdeskripsi, editTextCaraPenanggulangan;
+    private Spinner spnamamesin, spdipasangoleh;
+    private IntentIntegrator qrScan;
 
     private Uri imageUri;
 
@@ -77,7 +89,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
     public static final int TANGGAL_PASANG = 0;
     public static final int DUE_DATE = 1;
     private int flag = 0;
-
 
 
     @Override
@@ -96,24 +107,46 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         editTextBagianMesin = findViewById(R.id.edtbagianmesin);
         spnamamesin = findViewById(R.id.spnamamesin);
         editTextNomorMesin = findViewById(R.id.edtnomormesin);
-        editTextdipasangoleh = findViewById(R.id.edtdipasangoleh);
+        spdipasangoleh = findViewById(R.id.spdipasangoleh);
         editTextdeskripsi = findViewById(R.id.edtdeskripsi);
         editTextCaraPenanggulangan = findViewById(R.id.edtcarapenanggulangan);
+        btnscanqr = findViewById(R.id.btnscanqr);
         String photo = photoUrl;
         storageReference = FirebaseStorage.getInstance().getReference("uploadphotoswhiteform");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploadphotoswhiteform");
+
+        //scanqr
+        qrScan = new IntentIntegrator(this);
+
 
         //spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.namamesin, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnamamesin.setAdapter(adapter);
 
+        //spinner
+        ArrayAdapter<CharSequence> adapterdipasangoleh = ArrayAdapter.createFromResource(this, R.array.dipasangoleh, android.R.layout.simple_spinner_item);
+        adapterdipasangoleh.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spdipasangoleh.setAdapter(adapterdipasangoleh);
+
         // spinner on click
 
         spnamamesin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("Spinner Selected Item",""+spnamamesin.getSelectedItem());
+                Log.v("Spinner Selected Item", "" + spnamamesin.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        // spinner dipasang oleh on click
+        spdipasangoleh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("Spinner Selected Item", "" + spdipasangoleh.getSelectedItem());
             }
 
             @Override
@@ -162,6 +195,72 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             }
         });
 
+        //Button Scan QR
+        btnscanqr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment selectedFragment = null;
+                selectedFragment = new ScanQRFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_containerr, selectedFragment).commit();
+
+
+
+
+            }
+        });
+
+
+        //get data from fragment
+        final String namamesinqr = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesinqr = getIntent().getStringExtra(EXTRA_NOMORMESIN);
+
+        if(namamesinqr != null) {
+            Log.v("Nama Mesin QR", namamesinqr);
+            int spnamamesinpos = adapter.getPosition(namamesinqr);
+            spnamamesin.setSelection(spnamamesinpos);
+        }
+        if(nomormesinqr != null) {
+            editTextNomorMesin.setText(nomormesinqr);
+        }
+
+        getNomorKontrol();
+    }
+
+
+
+
+    private void getNomorKontrol() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+
+        Call<WhiteFormLastId> call = service.getLastIdWhiteForm();
+
+        call.enqueue(new Callback<WhiteFormLastId>() {
+            @Override
+            public void onResponse(Call<WhiteFormLastId> call, Response<WhiteFormLastId> response) {
+                int form_id = response.body().getForm_id();
+                String nomor_kontrol = response.body().getNomor_kontrol();
+                StringBuilder sbnomorkontrol = new StringBuilder(nomor_kontrol);
+                StringBuilder angkanomorkontrol = sbnomorkontrol.deleteCharAt(0);
+
+                int nomorkontrol = Integer.parseInt(angkanomorkontrol.toString()) + 1;
+                String nomorkontrolbaru = "W" + String.valueOf(nomorkontrol);
+
+                editTextNomorKontrol.setText(nomorkontrolbaru);
+            }
+
+            @Override
+            public void onFailure(Call<WhiteFormLastId> call, Throwable t) {
+
+            }
+        });
+
 
     }
 
@@ -186,11 +285,11 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
         String nama_mesin = spnamamesin.getSelectedItem().toString();
         String nomor_mesin = editTextNomorMesin.getText().toString().trim();
-        String dipasang_oleh = editTextdipasangoleh.getText().toString().trim();
+        String dipasang_oleh = spdipasangoleh.getSelectedItem().toString();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextdeskripsi.getText().toString().trim();
         String due_date = textViewDueDate.getText().toString().trim();
-        String cara_penanggulangan =  editTextCaraPenanggulangan.getText().toString().trim();
+        String cara_penanggulangan = editTextCaraPenanggulangan.getText().toString().trim();
 
         //validation
 
@@ -215,12 +314,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             return;
         }
 
-        if (TextUtils.isEmpty(dipasang_oleh)) {
-            editTextdipasangoleh.setError("Masukkan Nama");
-            editTextdipasangoleh.requestFocus();
-            progressDialog.dismiss();
-            return;
-        }
 
         if (TextUtils.isEmpty(deskripsi)) {
             editTextdeskripsi.setError("Masukkan Deskripsi");
@@ -235,7 +328,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             progressDialog.dismiss();
             return;
         }
-
 
 
         if (textViewTanggalPasang.getText().toString().matches("")) {
@@ -262,12 +354,11 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             return;
         }
 
-        if(imageUri !=null) {
-
+        if (imageUri != null) {
 
 
             final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
-                    +"."+ getFileExtension(imageUri));
+                    + "." + getFileExtension(imageUri));
 
             uploadTask = fileReference.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -335,12 +426,12 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
         String nama_mesin = spnamamesin.getSelectedItem().toString();
         String nomor_mesin = editTextNomorMesin.getText().toString().trim();
-        String dipasang_oleh = editTextdipasangoleh.getText().toString().trim();
+        String dipasang_oleh = spdipasangoleh.getSelectedItem().toString();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextdeskripsi.getText().toString().trim();
         String photo = photoUrl;
         String due_date = textViewDueDate.getText().toString().trim();
-        String cara_penanggulangan =  editTextCaraPenanggulangan.getText().toString().trim();
+        String cara_penanggulangan = editTextCaraPenanggulangan.getText().toString().trim();
 
         //validation
 
@@ -365,12 +456,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             return;
         }
 
-        if (TextUtils.isEmpty(dipasang_oleh)) {
-            editTextdipasangoleh.setError("Masukkan Nama");
-            editTextdipasangoleh.requestFocus();
-            progressDialog.dismiss();
-            return;
-        }
 
         if (TextUtils.isEmpty(deskripsi)) {
             editTextdeskripsi.setError("Masukkan Deskripsi");
@@ -385,7 +470,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             progressDialog.dismiss();
             return;
         }
-
 
 
         if (textViewTanggalPasang.getText().toString().matches("")) {
@@ -411,9 +495,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
             Toast.makeText(NewWhiteFormActivity.this, "Masukkan Foto", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
-
 
 
         //building retrofit object
@@ -448,7 +529,6 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
                 Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
 
 
-
             }
 
             @Override
@@ -479,12 +559,14 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-        && data != null && data.getData() !=null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
             textViewImage.setText("1 Foto Dipilih");
             Picasso.get().load(imageUri).into(imageViewPhoto);
         }
+
+
 
     }
 
@@ -495,19 +577,21 @@ public class NewWhiteFormActivity extends AppCompatActivity implements DatePicke
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
-        int month1= month + 1;
+        int month1 = month + 1;
 
-        if(flag == TANGGAL_PASANG) {
+        if (flag == TANGGAL_PASANG) {
             TextView tvtglpasang = findViewById(R.id.tvtglpasang);
-            tvtglpasang.setText(year+"-"+month1+"-"+dayOfMonth);
+            tvtglpasang.setText(year + "-" + month1 + "-" + dayOfMonth);
 
         }
-        else if (flag == DUE_DATE) {
-            TextView tvdueDate = findViewById(R.id.tvduedate);
-            tvdueDate.setText(year+"-"+month1+"-"+dayOfMonth);
-        }
+      else if (flag == DUE_DATE) {
+           TextView tvdueDate = findViewById(R.id.tvduedate);
+           tvdueDate.setText(year+"-"+month1+"-"+dayOfMonth);
+       }
 
 
     }
+
+
 
 }

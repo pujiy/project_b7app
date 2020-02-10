@@ -26,11 +26,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.example.b7tpm.Api.APIService;
 import com.example.b7tpm.Api.APIUrl;
 import com.example.b7tpm.Helper.SharedPrefManager;
 import com.example.b7tpm.Model.NewRedFormResponse;
+import com.example.b7tpm.Model.RedFormLastId;
 import com.example.b7tpm.Model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +43,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -54,21 +57,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewRedFormActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    public static final String EXTRA_NOMORMESIN = "nomormesin";
+    public static final String EXTRA_NAMAMESIN = "namamesin";
+
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonChooseImage;
     private Button buttonSubmitRedForm;
     private Button buttonTglPasang;
     private Button buttonDueDate;
+    private Button buttonScanQR;
     private ImageView imageViewPhoto;
     private ProgressBar progressBar;
     private String photoUrl;
     private int isAdmin = 0;
     private int isSpv = 0;
     private TextView textViewTanggalPasang, textViewDueDate, textViewImage;
-    private EditText editTextNomorKontrol, editTextBagianMesin, editTextNomorMesin, editTextDipasangoleh, editTextPicFollowUp, editTextNomorWorkRequest, editTextDeskripsi, editTextCaraPenanggulangan;
-    private Spinner spnamamesin;
+    private EditText editTextNomorKontrol, editTextBagianMesin, editTextNomorMesin, editTextPicFollowUp, editTextNomorWorkRequest, editTextDeskripsi, editTextCaraPenanggulangan;
+    private Spinner spnamamesin, spdipasangoleh;
     private Uri imageUri;
+    private IntentIntegrator qrScan;
 
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
@@ -97,13 +105,15 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
         editTextBagianMesin = findViewById(R.id.edtbagianmesin);
         spnamamesin = findViewById(R.id.spnamamesin);
         editTextNomorMesin = findViewById(R.id.edtnomormesin);
-        editTextDipasangoleh = findViewById(R.id.edtdipasangoleh);
+        spdipasangoleh = findViewById(R.id.spdipasangoleh);
         editTextDeskripsi = findViewById(R.id.edtdeskripsi);
         editTextNomorWorkRequest = findViewById(R.id.edtnomorworkrequest);
         editTextPicFollowUp = findViewById(R.id.edtpicfollowup);
         editTextCaraPenanggulangan = findViewById(R.id.edtcarapenanggulangan);
+        buttonScanQR = findViewById(R.id.btn_scanqr);
         String photo = photoUrl;
         int isUser = 0;
+        qrScan = new IntentIntegrator(this);
         storageReference = FirebaseStorage.getInstance().getReference("uploadphotoswhiteform");
         databaseReference = FirebaseDatabase.getInstance().getReference("uploadphotoswhiteform");
 
@@ -111,6 +121,11 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.namamesin, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnamamesin.setAdapter(adapter);
+
+        //spinner
+        ArrayAdapter<CharSequence> adapterdipasangoleh = ArrayAdapter.createFromResource(this, R.array.dipasangoleh, android.R.layout.simple_spinner_item);
+        adapterdipasangoleh.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spdipasangoleh.setAdapter(adapterdipasangoleh);
 
         // spinner on click
 
@@ -125,6 +140,47 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
 
             }
         });
+
+        // spinner dipasang oleh on click
+        spdipasangoleh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("Spinner Selected Item", "" + spdipasangoleh.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        buttonScanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Fragment selectedFragment = null;
+                selectedFragment = new RedFormScanQRFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_containerr, selectedFragment).commit();
+
+            }
+        });
+
+        //get data from fragment
+        final String namamesinqr = getIntent().getStringExtra(EXTRA_NAMAMESIN);
+        final String nomormesinqr = getIntent().getStringExtra(EXTRA_NOMORMESIN);
+
+        if(namamesinqr != null) {
+            Log.v("Nama Mesin QR", namamesinqr);
+            int spnamamesinpos = adapter.getPosition(namamesinqr);
+            spnamamesin.setSelection(spnamamesinpos);
+        }
+        if(nomormesinqr != null) {
+            editTextNomorMesin.setText(nomormesinqr);
+        }
+
+        getNomorKontrol();
+
+
 
         //getting the current user
         User user = SharedPrefManager.getInstance(this).getUser();
@@ -172,6 +228,37 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
 
     }
 
+    private void getNomorKontrol() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        APIService service = retrofit.create(APIService.class);
+
+        Call<RedFormLastId> call = service.getLastIdRedForm();
+
+        call.enqueue(new Callback<RedFormLastId>() {
+            @Override
+            public void onResponse(Call<RedFormLastId> call, Response<RedFormLastId> response) {
+                int form_id = response.body().getForm_id();
+                String nomor_kontrol = response.body().getNomor_kontrol();
+                StringBuilder sbnomorkontrol = new StringBuilder(nomor_kontrol);
+                StringBuilder angkanomorkontrol = sbnomorkontrol.deleteCharAt(0);
+
+                int nomorkontrol = Integer.parseInt(angkanomorkontrol.toString()) + 1;
+                String nomorkontrolbaru = "R" + String.valueOf(nomorkontrol);
+
+                editTextNomorKontrol.setText(nomorkontrolbaru);
+            }
+
+            @Override
+            public void onFailure(Call<RedFormLastId> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     // Get File Extension
     private String getFileExtension(Uri uri) {
@@ -191,7 +278,7 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
         String nama_mesin = spnamamesin.getSelectedItem().toString();
         String nomor_mesin = editTextNomorMesin.getText().toString().trim();
-        String dipasang_oleh = editTextDipasangoleh.getText().toString().trim();
+        String dipasang_oleh = spdipasangoleh.getSelectedItem().toString();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextDeskripsi.getText().toString().trim();
         String due_date = textViewDueDate.getText().toString().trim();
@@ -220,12 +307,7 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
             return;
         }
 
-        if (TextUtils.isEmpty(dipasang_oleh)) {
-            editTextDipasangoleh.setError("Masukkan Nama");
-            editTextDipasangoleh.requestFocus();
-            progressDialog.dismiss();
-            return;
-        }
+
 
         if (TextUtils.isEmpty(deskripsi)) {
             editTextDeskripsi.setError("Masukkan Deskripsi");
@@ -335,7 +417,7 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
         String bagian_mesin = editTextBagianMesin.getText().toString().trim();
         String nama_mesin = spnamamesin.getSelectedItem().toString();
         String nomor_mesin = editTextNomorMesin.getText().toString().trim();
-        String dipasang_oleh = editTextDipasangoleh.getText().toString().trim();
+        String dipasang_oleh = spdipasangoleh.getSelectedItem().toString();
         String tgl_pasang = textViewTanggalPasang.getText().toString().trim();
         String deskripsi = editTextDeskripsi.getText().toString().trim();
         String photo = photoUrl;
@@ -367,12 +449,7 @@ public class NewRedFormActivity extends AppCompatActivity implements DatePickerD
             return;
         }
 
-        if (TextUtils.isEmpty(dipasang_oleh)) {
-            editTextDipasangoleh.setError("Masukkan Nama");
-            editTextDipasangoleh.requestFocus();
-            progressDialog.dismiss();
-            return;
-        }
+
 
         if (TextUtils.isEmpty(deskripsi)) {
             editTextDeskripsi.setError("Masukkan Deskripsi");

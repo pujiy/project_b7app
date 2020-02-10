@@ -11,7 +11,7 @@
 
 
     <LinearLayout
-
+        android:id="@+id/fragment_containerr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -44,6 +44,7 @@
             app:met_floatingLabel="highlight"
             android:textSize="16sp"
             android:hint="Nomor Kontrol"
+            android:enabled="false"
             app:met_primaryColor="@android:color/holo_green_dark"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -87,17 +88,15 @@
             android:hint="Nomor Mesin"
             app:met_primaryColor="@android:color/holo_green_dark"/>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/edtdipasangoleh"
+        <Spinner
+            android:id="@+id/spdipasangoleh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            app:met_floatingLabel="highlight"
             android:textSize="16sp"
-            android:hint="Dipasang Oleh"
-            app:met_primaryColor="@android:color/holo_green_dark"/>
+            android:hint="Dipasang Oleh" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -127,6 +126,14 @@
             android:layout_marginRight="20dp"
             android:textSize="16sp"
             tools:text = "image.jpg" />
+
+        <Button
+            android:id="@+id/btnscanqr"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="Scan QR"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtdeskripsi"

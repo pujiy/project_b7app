@@ -11,7 +11,7 @@ public class MenuGridData {
             "Buat Form Baru",
             "Administrasi Form",
             "Status Form",
-            "Barcode Scanner",
+            "Informasi Mesin dan Scan QR",
             "Menu RCA",
             "Informasi TPM",
             "Users"

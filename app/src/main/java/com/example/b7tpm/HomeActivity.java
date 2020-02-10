@@ -102,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        if (menuGrid.getName() == "Barcode Scanner") {
+        if (menuGrid.getName() == "Informasi Mesin dan Scan QR") {
             Intent intent = new Intent(HomeActivity.this, BarcodeActivity.class);
             startActivity(intent);
         }

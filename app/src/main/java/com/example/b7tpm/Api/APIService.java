@@ -9,6 +9,7 @@ import com.example.b7tpm.Model.DeleteWhiteFormResponse;
 import com.example.b7tpm.Model.NewRedFormResponse;
 import com.example.b7tpm.Model.NewWhiteFormResponse;
 import com.example.b7tpm.Model.RedFormClose;
+import com.example.b7tpm.Model.RedFormLastId;
 import com.example.b7tpm.Model.ResultDataMesin;
 import com.example.b7tpm.Model.StatusRedForm;
 import com.example.b7tpm.Model.StatusUser;
@@ -19,6 +20,7 @@ import com.example.b7tpm.Model.UpdateStatusWhiteFormResponse;
 import com.example.b7tpm.Model.WhiteForm;
 import com.example.b7tpm.Model.WhiteFormClose;
 import com.example.b7tpm.Model.Result;
+import com.example.b7tpm.Model.WhiteFormLastId;
 
 
 import retrofit2.Call;
@@ -183,7 +185,11 @@ public interface APIService {
     @GET("users")
     Call<StatusUser> getStatusUser();
 
+    @GET("lastidwhiteform")
+    Call<WhiteFormLastId> getLastIdWhiteForm();
 
+    @GET("lastidredform")
+    Call<RedFormLastId> getLastIdRedForm();
 
     @GET("datamesin/{nomormesin}")
     Call<DataMesin> getDataMesin (@Path("nomormesin") String nomormesin);

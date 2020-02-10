@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_b7tpm"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MenuRCARedFormsCategoryActivity"></activity>
+        <activity android:name=".MenuRCARedFormsCategoryActivity" />
         <activity android:name=".MenuRCAWhiteFormsCategoryActivity" />
         <activity android:name=".DetailStatusLevelUserActivity" />
         <activity android:name=".StatusLevelUserActivity" />
